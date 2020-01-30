@@ -9,7 +9,13 @@
       {% endfor %}
     </div>
     <div id="actions">
-      <p>TODO: put a form here for users to enter commands</p>
+      <form method="post">
+        {% csrf_token %}
+        <table>
+          {{ command_form.as_table }}
+        </table>
+        <input type="submit"/>
+      </form>
     </div>
   </body>
 </html
