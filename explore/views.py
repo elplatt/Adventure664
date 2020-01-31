@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import loader
@@ -5,6 +7,7 @@ from django.template import loader
 from .models import Activity
 from .forms import CommandForm
 
+@login_required
 def room(request, room_id=None):
 
     # If data has been posted, handle the command

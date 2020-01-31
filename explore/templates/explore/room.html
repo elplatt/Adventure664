@@ -1,21 +1,19 @@
-<html>
-  <head>
-    <title>664 Adventure</title>
-  </head>
-  <body>
-    <div id="activity">
-      {% for activity in activities %}
-        <div class="activity">{{ activity.activity_text }}</div>
-      {% endfor %}
-    </div>
-    <div id="actions">
-      <form method="post">
-        {% csrf_token %}
-        <table>
-          {{ command_form.as_table }}
-        </table>
-        <input type="submit"/>
-      </form>
-    </div>
-  </body>
-</html
+{% extends 'base.html' %}
+
+{% block content %}
+  <div id="activity">
+    {% for activity in activities %}
+      <div class="activity">{{ activity.activity_text }}</div>
+    {% endfor %}
+  </div>
+  <div id="actions">
+    <form method="post">
+      {% csrf_token %}
+      <table>
+        {{ command_form.as_table }}
+      </table>
+      <input type="submit"/>
+    </form>
+  </div>
+{% endblock %}
+
