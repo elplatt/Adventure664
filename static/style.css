@@ -1,0 +1,9 @@
+#activity {
+  border: solid 1px;
+  width: 80ch;
+  font-family: 'courier new';
+  padding: 1em 1ch;
+}
+#actions input {
+  font-family: 'courier new';
+}

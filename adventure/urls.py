@@ -15,11 +15,13 @@ Including another URLconf
 """
 import os
 
+from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+from django.views.static import serve
 
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#SITE_ROOT = os.path.join(BASE_DIR, 'site')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SITE_ROOT = os.path.join(BASE_DIR, 'site')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
