@@ -23,7 +23,7 @@ def room(request, room_id=None):
     activities = Activity.objects.order_by('created_at')
     context = {
        'activities': activities,
-       'command_form': CommandForm()
+       'command_form': CommandForm(label_suffix='')
     }
 
     # Render the template

@@ -9,10 +9,7 @@
   <div id="actions">
     <form method="post">
       {% csrf_token %}
-      <table>
-        {{ command_form.as_table }}
-      </table>
-      <input type="submit"/>
+        {{ command_form }}
     </form>
   </div>
 {% endblock %}
