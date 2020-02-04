@@ -16,7 +16,8 @@ def room(request, room_id=None):
         form = CommandForm(request.POST)
         if form.is_valid():
             # Create a new activity
-            activity = Activity(activity_text=form.cleaned_data['command_text'])
+            activity_text = f'{request.user.username}: {form.cleaned_data["command_text"]}'
+            activity = Activity(activity_text=activity_text)
             activity.save()
 
     # Get a list of activities
