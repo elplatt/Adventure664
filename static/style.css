@@ -1,15 +1,13 @@
-#activity {
+.section {
   border: solid 1px gray;
   width: 82ch;
   font-family: 'courier new';
   padding: 1em 1ch;
+  margin-bottom: -1px;
+}
+#activity {
 }
 #actions {
-  font-family: 'courier new';
-  width: 82ch;
-  padding: 1em 1ch;
-  border: solid 1px gray;
-  border-top: 0;
 }
 #actions form {
   margin: 0;
