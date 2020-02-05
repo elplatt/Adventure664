@@ -1,9 +1,15 @@
 from django import forms
 
 class SelectAreaForm(forms.Form):
+    area_attrs = {
+        'autofocus': 'autofocus',
+        'autocomplete': 'off',
+    }
     area_title = forms.CharField(
         max_length=512,
-        label='Area Name',
+        label='Area Name ',
+        label_suffix='>',
+        widget=forms.TextInput(attrs=area_attrs),
     )
 
 class CommandForm(forms.Form):

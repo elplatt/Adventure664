@@ -1,25 +1,38 @@
+h1 {
+  font-family: 'courier new';
+  font-size: 1em;
+  font-weight: bold;
+  margin: auto;
+  width: 82ch;
+  padding: 1em 1ch;
+  margin: 0 auto;
+}
+h1 a {
+  color: inherit;
+  text-decoration: inherit;
+}
 .section {
   border: solid 1px gray;
   width: 82ch;
   font-family: 'courier new';
   padding: 1em 1ch;
-  margin-bottom: -1px;
+  margin: 0 auto -1px auto;
 }
 #activity {
 }
 #actions {
 }
-#actions form {
+.section form {
   margin: 0;
 }
-#actions label {
+.section label {
   display: inline-block;
   font-family: 'courier new';
   font-weight: normal;
   white-space: nowrap;
   margin-right: 1ch;
 }
-#id_command_text {
+.section input[type=text] {
   font-family: 'courier new';
   display: inline-block;
   outline: 0;
@@ -27,5 +40,7 @@
   margin: 0;
   border: 0;
   font-size: 1em;
+}
+#id_command_text {
   width: 78ch;
 }
