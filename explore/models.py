@@ -21,6 +21,10 @@ class Area(models.Model):
 class Activity(models.Model):
 
     created_at = DateTimeField(auto_now_add=True)
+    creator = ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL)
     activity_text = CharField(max_length=512)
     area = ForeignKey(Area, null=True, on_delete=models.CASCADE)
 

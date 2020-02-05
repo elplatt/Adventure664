@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div id="select-area">
+    <form method="post">
+      {% csrf_token %}
+      {{ select_area_form }}
+    </form>
+  </div>
+{% endblock %}
+

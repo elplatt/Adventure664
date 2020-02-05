@@ -25,6 +25,6 @@ SITE_ROOT = os.path.join(BASE_DIR, 'site')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('explore/', include('explore.urls', namespace='explore')), 
+    path('explore/', include('explore.urls')), 
     path('accounts/', include('django.contrib.auth.urls')),
 ]

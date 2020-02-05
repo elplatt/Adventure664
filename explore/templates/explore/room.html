@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div id="activity">
+  <div id="info" class="section">
+    {{ area.title }}
+  </div>
+  <div id="activity" class="section">
     {% for activity in activities %}
       <div class="activity">{{ activity.activity_text }}</div>
     {% endfor %}
   </div>
-  <div id="actions">
+  <div id="actions" class="section">
     <form method="post">
       {% csrf_token %}
         {{ command_form }}
