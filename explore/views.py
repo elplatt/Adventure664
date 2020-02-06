@@ -68,6 +68,7 @@ def area_description(request, area_id):
         if form.is_valid():
             area.description = request.POST.get('description', '')
             area.save()
+            return HttpResponseRedirect(reverse('explore:area', args=[area_id]))
 
     # Render edit form
     context = {
