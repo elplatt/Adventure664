@@ -20,5 +20,16 @@ class CommandForm(forms.Form):
     command_text = forms.CharField(
         max_length=512,
         label='>',
-        widget=forms.TextInput(attrs=command_attrs
-))
+        widget=forms.TextInput(attrs=command_attrs),
+    )
+
+class AreaForm(forms.Form):
+    attrs = {
+        'autofocus': 'autofocus',
+        'cols': '80',
+    }
+    description = forms.CharField(
+        label='Description',
+        widget=forms.Textarea(attrs=attrs),
+    )
+

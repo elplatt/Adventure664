@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div id="info" class="section">
+    {{ area.title }}
+  </div>
+  <div id="description" class="section">
+    <form method="post">
+      {% csrf_token %}
+      {{ area_form }}
+      <input type="submit" value="Update"/>
+    </form>
+  </div>
+{% endblock %}
+

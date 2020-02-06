@@ -7,7 +7,7 @@ from django.template import loader
 from django.urls import reverse
 
 from .models import Activity, Area
-from .forms import CommandForm, SelectAreaForm
+from .forms import CommandForm, SelectAreaForm, AreaForm
 
 @login_required
 def index(request):
@@ -56,3 +56,23 @@ def area(request, area_id):
     }
     return render(request, 'explore/room.html', context)
 
+@login_required
+def area_description(request, area_id):
+
+    # Look up area object
+    area = get_object_or_404(Area, id=area_id)
+
+    # Check for changes
+    if request.method == 'POST':
+        # Create and validate a form
+        form = AreaForm(request.POST)
+        if form.is_valid():
+            area.description = request.POST.get('description', '')
+            area.save()
+
+    # Render edit form
+    context = {
+        'area': area,
+        'area_form': AreaForm(initial={'description': area.description}),
+    }
+    return render(request, 'explore/area_detail.html', context)
