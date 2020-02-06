@@ -8,6 +8,7 @@ from django.urls import reverse
 
 from .models import Activity, Area
 from .forms import CommandForm, SelectAreaForm, AreaForm
+from .interpreter import Interpreter
 
 @login_required
 def index(request):
@@ -37,13 +38,11 @@ def area(request, area_id):
         # Create and validate a form
         form = CommandForm(request.POST)
         if form.is_valid():
-            # Create a new activity
-            activity_text = f'{request.user.username}: {form.cleaned_data["command_text"]}'
-            activity = Activity(
-                creator=request.user,
-                area=area,
-                activity_text=activity_text)
-            activity.save()
+            # Create the interpreter
+            i = Interpreter({'user': request.user, 'area': area})
+            path = i.execute(form.cleaned_data["command_text"])
+            if path is not None:
+                return HttpResponseRedirect(path)
 
     # Get a list of activities
     activities = Activity.objects.filter(area=area).order_by('created_at')
