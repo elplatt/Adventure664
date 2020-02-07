@@ -36,6 +36,7 @@ h1 a {
   white-space: nowrap;
   margin-right: 1ch;
 }
+.section input[type=password],
 .section input[type=text] {
   font-family: 'courier new';
   display: inline-block;
@@ -72,10 +73,10 @@ input[type=submit]:focus {
 #id_command_text {
   width: 78ch;
 }
-#info p:first-child {
+.section p:first-child {
   margin-top: 0;
 }
-#info p:last-child {
+.section p:last-child {
   margin-bottom: 0;
 }
 #area-description {
@@ -83,4 +84,25 @@ input[type=submit]:focus {
 }
 #id_destination_title {
   width: 61ch;
+}
+.form label {
+  display: inline;
+  margin: 0;
+  font-weight: bold;
+}
+.form label::after {
+  display: inline;
+  content: '\A>';
+  white-space: pre-wrap;
+}
+#create-user ul {
+  margin-top: 0;
+}
+.form input[type=text],
+.form input[type=password] {
+  display: inline;
+}
+.helptext {
+  display: inline-block;
+  width: 80ch;
 }

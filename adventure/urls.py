@@ -20,11 +20,14 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.static import serve
 
+import home.views
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_ROOT = os.path.join(BASE_DIR, 'site')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('explore/', include('explore.urls')), 
+    path('accounts/register', home.views.register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

@@ -2,7 +2,7 @@
 
 {% block content %}
   
-  <div class="section">Login</div>
+  <div class="section">Create User</div>
 
   {% if form.errors %}
     <div class="section">
@@ -23,12 +23,12 @@
     </div>
   {% endif %}
 
-  <div id="login-user" class="section form">
+  <div id="create-user" class="section">
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
       <input type="hidden" name="next" value="{{ next }}"/>
-      <input type="submit" value="login"/>
+      <input type="submit" value="create"/>
     </form> 
   </div>
 {% endblock %}
