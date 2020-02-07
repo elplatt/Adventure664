@@ -33,3 +33,13 @@ class AreaForm(forms.Form):
         widget=forms.Textarea(attrs=attrs),
     )
 
+class ConnectionForm(forms.Form):
+    attrs = {
+        'autofocus': 'autofocus',
+        'autocomplete': 'off',
+    }
+    destination_title = forms.CharField(
+        label='Destination Area',
+        label_suffix=' >',
+        widget=forms.TextInput(attrs=attrs),
+    )

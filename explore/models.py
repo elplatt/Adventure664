@@ -31,3 +31,15 @@ class Activity(models.Model):
     def __str__(self):
         return self.activity_text
 
+class Connection(models.Model):
+    created_at = DateTimeField(auto_now_add=True)
+    creator = ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL)
+    area_from = ForeignKey(Area, on_delete=models.CASCADE, related_name='outgoing')
+    area_to = ForeignKey(Area, on_delete=models.CASCADE, related_name='incoming')
+    title = CharField(max_length=512)
+
+    def __str__(self):
+        return f'{self.area_from.id} : {self.title} -> {self.area_to.id})'

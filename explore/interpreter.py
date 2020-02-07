@@ -17,7 +17,16 @@ class Interpreter(object):
             target = words[1]
 
         # Determine type of command
-        if operator == 'edit':
+        if operator == 'create':
+            if target == 'connection':
+                if len(words) > 2:
+                    title = ' '.join(words[2:])
+                    kwargs = {
+                        'source_id': self.models['area'].id,
+                        'title': title,
+                    }
+                    return reverse('explore:new_connection', kwargs=kwargs)
+        elif operator == 'edit':
             if target == 'description':
                 return reverse('explore:area_description', args=[self.models['area'].id])
 

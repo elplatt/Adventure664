@@ -6,6 +6,12 @@
     {% if area.description %}
       <div id="area-description">{{ area.description }}</div>
     {% endif %}
+    <p id="area-exits">
+      Connections:
+      {% for c in area.outgoing.all %}
+        {{ c.title }}
+      {% endfor %}
+    </p>
   </div>
   <div id="activity" class="section">
     {% for activity in activities %}
