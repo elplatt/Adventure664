@@ -1,6 +1,12 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import CharField, DateTimeField, ForeignKey, TextField
+from django.db.models import (
+    BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    TextField,
+)
 
 # Create your models here.
 
@@ -27,6 +33,7 @@ class Activity(models.Model):
         on_delete=models.SET_NULL)
     activity_text = CharField(max_length=512)
     area = ForeignKey(Area, null=True, on_delete=models.CASCADE)
+    creator_only = BooleanField(default=False)
 
     def __str__(self):
         return self.activity_text

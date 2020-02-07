@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 
+from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -50,7 +51,8 @@ def area(request, area_id):
                 return HttpResponseRedirect(path)
 
     # Get a list of activities
-    activities = Activity.objects.filter(area=area).order_by('created_at')
+    for_user = Q(creator_only=False) | Q(creator=request.user)
+    activities = Activity.objects.filter(area=area).filter(for_user).order_by('created_at')
 
     # Build context and render the template
     context = {
@@ -91,6 +93,13 @@ def new_connection(request, source_id, title):
     # Check whether connection exists
     try:
         connection = Connection.objects.get(area_from=area_from, title=title)
+        activity = Activity(
+            creator=request.user,
+            creator_only=True,
+            area=area_from,
+            activity_text=f'Unable to create connection "{title}": already exists'
+        )
+        activity.save()
         return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))        
     except ObjectDoesNotExist:
         pass
