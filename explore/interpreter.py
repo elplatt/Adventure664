@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from .models import Activity
 
@@ -47,6 +48,19 @@ class Interpreter(object):
         elif operator == 'edit':
             if target == 'description':
                 return reverse('explore:area_description', args=[self.models['area'].id])
+        elif operator in Interpreter.ALLOWED_CONNECTIONS:
+            try:
+	            destination = self.models['area'].outgoing.get(title=command).area_to
+        	    return reverse('explore:area', args=[destination.id])
+            except ObjectDoesNotExist:
+                    activity = Activity(
+                        area=self.models['area'],
+                        creator=self.models['user'],
+                        creator_only=True,
+                        activity_text=f'Connection "{command}" does not exist',
+                    )
+                    activity.save()
+                    return reverse('explore:area', args=[self.models['area'].id])
         else:
             # If no command, leave a message
             activity_text = f'{self.models["user"].username}: {command}'
