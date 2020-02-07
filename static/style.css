@@ -18,7 +18,11 @@ h1 a {
   padding: 1em 1ch;
   margin: 0 auto -1px auto;
 }
-#activity {
+.activity {
+  margin-bottom: 1em;
+}
+.activity:last-child {
+  margin-bottom: 0;
 }
 #actions {
 }
