@@ -64,7 +64,8 @@ input[type=submit] {
   font-family: 'courier new';
   font-size: 1em;
 }
-input[type=submit]:hover {
+input[type=submit]:hover,
+input[type=submit]:focus {
   color: white;
   background: black;
 }
