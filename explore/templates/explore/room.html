@@ -6,6 +6,9 @@
     {% if area.description %}
       <div id="area-description">{{ area.description }}</div>
     {% endif %}
+  </div>
+  {% if area.outgoing.count > 0 %}
+  <div class="section">
     <p id="area-exits">
       Connections:
       {% for c in area.outgoing.all %}
@@ -13,6 +16,7 @@
       {% endfor %}
     </p>
   </div>
+  {% endif %}
   <div id="activity" class="section">
     {% for activity in activities %}
       <div class="activity">{{ activity.activity_text }}</div>
@@ -23,6 +27,16 @@
       {% csrf_token %}
         {{ command_form }}
     </form>
+  </div>
+  <h2>How to Play</h2>
+  <div id="tutorial">
+    <p>
+      Some examples:<br/>
+      &gt; edit description<br/>
+      &gt; create connection north<br/>
+      &gt; north<br/>
+      &gt; Hello, World!
+    </p>
   </div>
 {% endblock %}
 

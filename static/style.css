@@ -1,4 +1,7 @@
-h1 {
+body {
+  font-family: 'courier new';
+}
+h1, h2 {
   font-family: 'courier new';
   font-size: 1em;
   font-weight: bold;
@@ -11,12 +14,20 @@ h1 a {
   color: inherit;
   text-decoration: inherit;
 }
+h2 {
+  margin-top: 2em;
+}
 .section {
   border: solid 1px gray;
   width: 82ch;
   font-family: 'courier new';
   padding: 1em 1ch;
   margin: 0 auto -1px auto;
+}
+#tutorial {
+  width: 82ch;
+  padding: 0;
+  margin: 0 auto;
 }
 .activity {
   margin-bottom: 1em;
@@ -56,6 +67,7 @@ h1 a {
   font-family: 'courier new';
   font-size: 1em;
 }
+button,
 input[type=submit] {
   display: inline-block;
   margin: 1em 0 0 0;
@@ -65,6 +77,8 @@ input[type=submit] {
   font-family: 'courier new';
   font-size: 1em;
 }
+button:hover,
+button:focus,
 input[type=submit]:hover,
 input[type=submit]:focus {
   color: white;
@@ -73,10 +87,10 @@ input[type=submit]:focus {
 #id_command_text {
   width: 78ch;
 }
-.section p:first-child {
+p:first-child {
   margin-top: 0;
 }
-.section p:last-child {
+p:last-child {
   margin-bottom: 0;
 }
 #area-description {
