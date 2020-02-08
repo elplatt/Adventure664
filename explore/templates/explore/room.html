@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block dashboard %}
+<div id="dashboard">
+  Score: {{ user.score.total|stringformat:"09d" }}
+</div>
+{% endblock %}
+
 {% block content %}
   <div id="info" class="section">
     <p>{{ area.title }}</p>

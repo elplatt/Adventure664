@@ -30,6 +30,7 @@ def index(request):
 
     context = {
         'select_area_form': SelectAreaForm,
+        'user': request.user,
     }
     return render(request, 'explore/index.html', context)
 
@@ -56,6 +57,7 @@ def area(request, area_id):
 
     # Build context and render the template
     context = {
+       'user': request.user,
        'area': area,
        'activities': activities,
        'command_form': CommandForm(label_suffix='')
@@ -81,6 +83,7 @@ def area_description(request, area_id):
     context = {
         'area': area,
         'area_form': AreaForm(initial={'description': area.description}),
+        'user': request.user,
     }
     return render(request, 'explore/area_detail.html', context)
 
@@ -124,5 +127,6 @@ def new_connection(request, source_id, title):
         'title': title,
         'area_from': area_from,
         'connection_form': ConnectionForm(),
+        'user': request.user,
     }
     return render(request, 'explore/connection_detail.html', context)

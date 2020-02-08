@@ -1,12 +1,17 @@
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import (
     BooleanField,
     CharField,
     DateTimeField,
     ForeignKey,
+    IntegerField,
+    OneToOneField,
     TextField,
 )
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -50,3 +55,19 @@ class Connection(models.Model):
 
     def __str__(self):
         return f'{self.area_from.id} : {self.title} -> {self.area_to.id})'
+
+class Score(models.Model):
+    user = OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        on_delete=models.CASCADE)
+    total = IntegerField(default=0)
+
+    def user_save_profile(sender, instance, **kwargs):
+        try:
+            Score.objects.get(user=instance)
+        except ObjectDoesNotExist:
+            Score(user=instance).save()
+	
+# Ensure each user has a score entry
+post_save.connect(Score.user_save_profile, sender=User)

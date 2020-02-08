@@ -5,8 +5,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
   </head>
   <body>
-    <h1><a href="{% url 'explore:index' %}">Adventure.TXT</a></h1>
-    {% block content %}
-    {% endblock %}
+    <div id="container">
+      <h1><a href="{% url 'explore:index' %}">Adventure.TXT</a></h1>
+      {% block dashboard %}
+      {% endblock %}
+      {% block content %}
+      {% endblock %}
+    </div>
   </body>
 </html>

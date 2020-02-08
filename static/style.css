@@ -1,12 +1,20 @@
 body {
   font-family: 'courier new';
 }
+#container {
+  width: 82ch;
+  margin: 0 auto;
+  position: relative;
+}
+#dashboard {
+  position: absolute;
+  top: 1em;
+  right: 1ch;
+}
 h1, h2 {
   font-family: 'courier new';
   font-size: 1em;
   font-weight: bold;
-  margin: auto;
-  width: 82ch;
   padding: 1em 1ch;
   margin: 0 auto;
 }
@@ -19,14 +27,12 @@ h2 {
 }
 .section {
   border: solid 1px gray;
-  width: 82ch;
   font-family: 'courier new';
   padding: 1em 1ch;
   margin: 0 auto -1px auto;
 }
 #tutorial {
-  width: 82ch;
-  padding: 0;
+  padding: 0 1ch;
   margin: 0 auto;
 }
 .activity {
@@ -86,6 +92,7 @@ input[type=submit]:focus {
 }
 #id_command_text {
   width: 78ch;
+  margin-right: -1ch;
 }
 p:first-child {
   margin-top: 0;
@@ -98,6 +105,7 @@ p:last-child {
 }
 #id_destination_title {
   width: 61ch;
+  margin-right: -1ch;
 }
 .form label {
   display: inline;
