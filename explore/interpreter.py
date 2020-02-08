@@ -69,6 +69,10 @@ class Interpreter(object):
                 area=self.models['area'],
                 activity_text=activity_text)
             activity.save()
+            if self.models['user'].id != self.models['area'].creator.id:
+                score = self.models['area'].creator.score
+                score.total += 1
+                score.save()
 
     def validate_connection(title):
         return len(title) > 0 and title in Interpreter.ALLOWED_CONNECTIONS

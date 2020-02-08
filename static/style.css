@@ -35,6 +35,9 @@ h2 {
   padding: 0 1ch;
   margin: 0 auto;
 }
+#activity {
+  max-height: 24em;
+}
 .activity {
   margin-bottom: 1em;
 }

@@ -77,6 +77,11 @@ def area_description(request, area_id):
         if form.is_valid():
             area.description = request.POST.get('description', '')
             area.save()
+            # Update scores
+            if request.user.id != area.creator.id:
+                score = area.creator.score
+                score.total += 10
+                score.save()
             return HttpResponseRedirect(reverse('explore:area', args=[area_id]))
 
     # Render edit form
@@ -112,7 +117,9 @@ def new_connection(request, source_id, title):
         # Create and validate a form
         form = ConnectionForm(request.POST)
         if form.is_valid():
-            area_to, created = Area.objects.get_or_create(title=form.cleaned_data['destination_title'])
+            area_to, created = Area.objects.get_or_create(
+                title=form.cleaned_data['destination_title'],
+                defaults={ 'creator': request.user })
             connection, created = Connection.objects.get_or_create(
                 title=title,
                 area_from=area_from,
@@ -120,6 +127,15 @@ def new_connection(request, source_id, title):
             )
             if created:
                 connection.save()
+                # Update scores
+                if area_from.creator.id != request.user.id:
+                    score = area_from.creator.score
+                    score.total += 10
+                    score.save()
+                if area_to.creator.id != request.user.id:
+                    score = area_to.creator.score
+                    score.total += 10
+                    score.save()
             return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
 
     # Render edit form

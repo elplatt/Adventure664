@@ -63,11 +63,11 @@ class Score(models.Model):
         on_delete=models.CASCADE)
     total = IntegerField(default=0)
 
-    def user_save_profile(sender, instance, **kwargs):
+    def user_save(sender, instance, **kwargs):
         try:
             Score.objects.get(user=instance)
         except ObjectDoesNotExist:
             Score(user=instance).save()
 	
 # Ensure each user has a score entry
-post_save.connect(Score.user_save_profile, sender=User)
+post_save.connect(Score.user_save, sender=User)
