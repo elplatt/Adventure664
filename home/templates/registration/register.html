@@ -6,7 +6,11 @@
 
   {% if form.errors %}
     <div class="section">
-      <p>Your username and password didn't match. Please try again.</p>
+      <ul>
+        {% for key, value in form.errors.items %}
+          <li>{{ key }}:{{ value }}</li>
+        {% endfor %}
+      </ul>
     </div>
   {% endif %}
 
@@ -23,7 +27,7 @@
     </div>
   {% endif %}
 
-  <div id="create-user" class="section">
+  <div id="create-user" class="section form">
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}

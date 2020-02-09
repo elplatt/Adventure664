@@ -18,7 +18,7 @@
         please login with an account that has access.
       </p>
     {% else %}
-      <p>Please login to see this page.</p>
+      <p>Please login to see this page or <a href="{% url 'register' %}">create an account</a>.</p>
     {% endif %}
     </div>
   {% endif %}
