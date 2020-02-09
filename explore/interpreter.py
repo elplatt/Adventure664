@@ -20,16 +20,17 @@ class Interpreter(object):
     def execute(self, command):
 
         # Parse command into words
+        command = command.strip().lower()
         words = command.split(' ')
         if len(words) > 0:
-            operator = words[0]
+            operator = words[0].strip().lower()
         if len(words) > 1:
-            target = words[1]
+            target = words[1].strip().lower()
 
         # Determine type of command
         if operator == 'create':
             if target == 'connection':
-                title = ' '.join(words[2:])
+                title = ' '.join(words[2:]).strip().lower()
                 if Interpreter.validate_connection(title):
                     kwargs = {
                         'source_id': self.models['area'].id,
@@ -50,8 +51,8 @@ class Interpreter(object):
                 return reverse('explore:area_description', args=[self.models['area'].id])
         elif operator in Interpreter.ALLOWED_CONNECTIONS:
             try:
-	            destination = self.models['area'].outgoing.get(title=command).area_to
-        	    return reverse('explore:area', args=[destination.id])
+                destination = self.models['area'].outgoing.get(title=command).area_to
+                return reverse('explore:area', args=[destination.id])
             except ObjectDoesNotExist:
                     activity = Activity(
                         area=self.models['area'],
