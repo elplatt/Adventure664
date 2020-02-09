@@ -12,7 +12,8 @@ from .forms import (
         AreaForm,
 	CommandForm,
         ConnectionForm,
-        SelectAreaForm
+        DeleteForm,
+        SelectAreaForm,
 )
 from .interpreter import Interpreter
 
@@ -126,7 +127,7 @@ def new_connection(request, source_id, title):
             connection, created = Connection.objects.get_or_create(
                 title=title,
                 area_from=area_from,
-                defaults={ 'area_to': area_to }
+                defaults={ 'area_to': area_to, 'creator': request.user }
             )
             if created:
                 connection.save()
@@ -149,3 +150,49 @@ def new_connection(request, source_id, title):
         'user': request.user,
     }
     return render(request, 'explore/connection_detail.html', context)
+
+@login_required
+def delete_connection(request, source_id, title):
+
+    # Look up source area object and connection
+    area_from = get_object_or_404(Area, id=source_id)
+    
+    # Check whether connection exists
+    try:
+        connection = Connection.objects.get(area_from=area_from, title=title)
+    except ObjectDoesNotExist:
+        activity = Activity(
+            creator=request.user,
+            creator_only=True,
+            area=area_from,
+            activity_text=f'Unable to delete connection "{title}": does not exist'
+        )
+        activity.save()
+        return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))        
+
+    # Check for changes
+    if request.method == 'POST':
+        # Create and validate a form
+        form = DeleteForm(request.POST)
+        if form.is_valid():
+            area_to = connection.area_to
+            connection.delete()
+            # Update scores
+            if area_from.creator.id != request.user.id:
+                score = area_from.creator.score
+                score.total += 5
+                score.save()
+            if area_to.creator.id != request.user.id:
+                score = area_to.creator.score
+                score.total += 5
+                score.save()
+            return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
+
+    # Render delete form
+    context = {
+        'type': 'Connection',
+        'title': f'{title} : {connection.title} : {connection.area_to}',
+        'form': DeleteForm(),
+        'user': request.user,
+    }
+    return render(request, 'explore/delete.html', context)

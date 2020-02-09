@@ -46,12 +46,51 @@ class Interpreter(object):
                     )
                     activity.save()
                     return reverse('explore:area', args=[self.models['area'].id])
+        if operator == 'delete':
+            if target == 'connection':
+                title = ' '.join(words[2:]).strip().lower()
+                if title in Interpreter.ALLOWED_CONNECTIONS:
+                    try:
+                        connection = self.models['area'].outgoing.get(title=title)
+                    except ObjectDoesNotExist:
+                        activity = Activity(
+                            area=self.models['area'],
+                            creator=self.models['user'],
+                            creator_only=True,
+                            activity_text=f'Connection "{title}" does not exist',
+                        )
+                        activity.save()
+                        return reverse('explore:area', args=[self.models['area'].id])
+
+                    # Make sure user created connection
+                    if connection.creator is not None and connection.creator.id != self.models['user'].id:
+                        activity = Activity(
+                            area=self.models['area'],
+                            creator=self.models['user'],
+                            creator_only=True,
+                            activity_text=f'Someone else created "{target}", you can\'t delete it... yet',
+                        )
+                        activity.save()
+                        return reverse('explore:area', args=[self.models['area'].id])
+
+                    # Send to the delete form
+                    kwargs = {
+                        'source_id': self.models['area'].id,
+                        'title': connection.title,
+                    }
+                    return reverse('explore:delete_connection', kwargs=kwargs)
         elif operator == 'edit':
             if target == 'description':
                 return reverse('explore:area_description', args=[self.models['area'].id])
         elif operator in Interpreter.ALLOWED_CONNECTIONS:
             try:
-                destination = self.models['area'].outgoing.get(title=command).area_to
+                connection = self.models['area'].outgoing.get(title=command)
+                destination = connection.area_to
+                if connection.creator is not None and connection.creator.id != self.models['user'].id:
+                    # Update score
+                    score = connection.creator.score
+                    score.total += 1
+                    score.save()
                 return reverse('explore:area', args=[destination.id])
             except ObjectDoesNotExist:
                     activity = Activity(

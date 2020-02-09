@@ -43,3 +43,6 @@ class ConnectionForm(forms.Form):
         label_suffix=' >',
         widget=forms.TextInput(attrs=attrs),
     )
+
+class DeleteForm(forms.Form):
+    pass

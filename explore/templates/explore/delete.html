@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block dashboard %}
+<div id="dashboard">
+  Score: {{ user.score.total|stringformat:"09d" }}
+</div>
+{% endblock %}
+
+{% block content %}
+  <div id="info" class="section">
+    Delete {{ type }}: {{ title }}
+  </div>
+  <div id="confirm" class="section">
+    <p>Are you sure?</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit" value="Delete"/>
+      <button onclick="window.history.back();return false;">Cancel</button>
+    </form>
+  </div>
+{% endblock %}
+
