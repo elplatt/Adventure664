@@ -25,6 +25,7 @@ class Area(models.Model):
     )
     title = CharField(max_length=512)
     description = TextField()
+    published = BooleanField(default=False)
 
     def __str__(self):
         return self.title

@@ -131,3 +131,13 @@ p:last-child {
   display: inline-block;
   width: 80ch;
 }
+#previous-areas ul {
+  margin: 0;
+  padding: 0;
+}
+#previous-areas li {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

@@ -12,10 +12,23 @@
   </div>
   <div id="select-area" class="section">
     <p>Where would you like to go?</p>
+    <p>Type anything here, or select from the list below.</p>
     <form method="post">
       {% csrf_token %}
       {{ select_area_form }}
     </form>
+  </div>
+  <div id="previous-areas" class="section">
+    <p>Recently Created</p>
+    {% if areas %}
+      <ul>
+      {% for a in areas %}
+        <li><a href="{% url 'explore:area' a.id %}">{{ a.title }}</a></li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>No areas have been published yet.</p>
+    {% endif %}
   </div>
 {% endblock %}
 

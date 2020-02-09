@@ -24,13 +24,14 @@ def index(request):
         try:
             area = Area.objects.get(title=request.POST['area_title'])
         except ObjectDoesNotExist:
-            area = Area(title=request.POST['area_title'], creator=request.user)
+            area = Area(title=request.POST['area_title'], creator=request.user, published=True)
             area.save()
         return HttpResponseRedirect(reverse('explore:area', kwargs={'area_id': area.id}))
 
     context = {
         'select_area_form': SelectAreaForm,
         'user': request.user,
+        'areas': Area.objects.filter(published=True),
     }
     return render(request, 'explore/index.html', context)
 
