@@ -24,7 +24,7 @@ class Area(models.Model):
         on_delete=models.SET_NULL,
     )
     title = CharField(max_length=512)
-    description = TextField()
+    description = TextField(blank=True, default='')
     published = BooleanField(default=False)
 
     def __str__(self):
