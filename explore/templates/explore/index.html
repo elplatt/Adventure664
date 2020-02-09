@@ -30,5 +30,19 @@
       <p>No areas have been published yet.</p>
     {% endif %}
   </div>
+  <div id="bottom">
+    <h2>Top Users</h2>
+    <table>
+      <thead>
+        <th>User</th>
+        <th>Score</th>
+      </thead>
+      <tbody>
+      {% for u in top_users %}
+        <tr><td>{{ u.username }}</td><td>{{ u.score.total|stringformat:"09d" }}</tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
 

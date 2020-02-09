@@ -141,3 +141,17 @@ p:last-child {
   padding: 0;
   list-style: none;
 }
+#bottom {
+  padding: 0 1ch;
+  margin: 0 auto;
+}
+#bottom th {
+  text-align: left;
+}
+#bottom table {
+  margin: 0 auto;
+  border-spacing: 1em 0;
+}
+#bottom h2 {
+  text-align: center;
+}
