@@ -2,7 +2,9 @@
 
 {% block dashboard %}
 <div id="dashboard">
+  {% if user.is_authenticated %}
   Score: {{ user.score.total|stringformat:"09d" }}
+  {% endif %}
 </div>
 {% endblock %}
 
@@ -31,10 +33,16 @@
     </div>
   {% endif %}
   <div id="actions" class="section">
-    <form method="post">
-      {% csrf_token %}
+    {%if user.is_authenticated %}
+      <form method="post">
+        {% csrf_token %}
         {{ command_form }}
-    </form>
+      </form>
+    {% else %}
+      <p>
+        You must <a href="{% url 'login' %}?next={{ request.path }}">login</a>
+        or <a href="{% url 'register' %}?next={{ request.path }}">create an account</a> to explore further.</p>
+    {% endif %}
   </div>
   <h2>How to Play</h2>
   <div id="tutorial">

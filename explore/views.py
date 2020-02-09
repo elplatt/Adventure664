@@ -17,17 +17,22 @@ from .forms import (
 )
 from .interpreter import Interpreter
 
-@login_required
 def index(request):
+
+    error = None
 
     # If data has been posted, redirect to room
     if request.method == 'POST':
         try:
             area = Area.objects.get(title=request.POST['area_title'])
+            return HttpResponseRedirect(reverse('explore:area', kwargs={'area_id': area.id}))
         except ObjectDoesNotExist:
-            area = Area(title=request.POST['area_title'], creator=request.user, published=True)
-            area.save()
-        return HttpResponseRedirect(reverse('explore:area', kwargs={'area_id': area.id}))
+            try:
+                area = Area(title=request.POST['area_title'], creator=request.user, published=True)
+                area.save()
+                return HttpResponseRedirect(reverse('explore:area', kwargs={'area_id': area.id}))
+            except ValueError:
+                error = 'No area by that name exists. To create one, you can <a href="/accounts/login?next=/explore">login</a> or <a href="/accounts/register?next=/explore">create an account</a>.'
 
     top_users = User.objects.exclude(username='admin').order_by('-score__total')[:5]
     context = {
@@ -35,10 +40,10 @@ def index(request):
         'user': request.user,
         'areas': Area.objects.filter(published=True),
         'top_users': top_users,
+        'error': error,
     }
     return render(request, 'explore/index.html', context)
 
-@login_required
 def area(request, area_id):
 
     # Get area object
@@ -56,7 +61,10 @@ def area(request, area_id):
                 return HttpResponseRedirect(path)
 
     # Get a list of activities
-    for_user = Q(creator_only=False) | Q(creator=request.user)
+    if request.user.is_authenticated:
+        for_user = Q(creator_only=False) | Q(creator=request.user)
+    else:
+        for_user = Q(creator_only=False)
     activities = Activity.objects.filter(area=area).filter(for_user).order_by('created_at')
 
     # Build context and render the template

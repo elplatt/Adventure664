@@ -2,7 +2,9 @@
 
 {% block dashboard %}
 <div id="dashboard">
+  {% if user.is_authenticated %}
   Score: {{ user.score.total|stringformat:"09d" }}
+  {% endif %}
 </div>
 {% endblock %}
 
@@ -17,6 +19,9 @@
       {% csrf_token %}
       {{ select_area_form }}
     </form>
+    {% if error %}
+    <p>{{ error|safe }}</p>
+    {% endif %}
   </div>
   <div id="previous-areas" class="section">
     <p>Recently Created</p>
