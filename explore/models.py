@@ -44,6 +44,9 @@ class Activity(models.Model):
     def __str__(self):
         return self.activity_text
 
+    def tidy(user, area):
+        Activity.objects.filter(creator_only=True, creator=user).exclude(area=area).delete()
+
 class Connection(models.Model):
     created_at = DateTimeField(auto_now_add=True)
     creator = ForeignKey(

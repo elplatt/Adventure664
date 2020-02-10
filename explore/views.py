@@ -46,8 +46,9 @@ def index(request):
 
 def area(request, area_id):
 
-    # Get area object
+    # Get area object and clear activities from other areas
     area = get_object_or_404(Area, id=area_id)
+    Activity.tidy(request.user, area)
 
     # If data has been posted, handle the command
     if request.method == 'POST':
