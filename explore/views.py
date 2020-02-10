@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.urls import reverse
 
-from .models import Activity, Area, Connection
+from .models import Activity, Area, Connection, News
 from .forms import (
         AreaForm,
 	CommandForm,
@@ -47,6 +47,7 @@ def index(request):
         'areas': Area.objects.filter(published=True),
         'top_users': top_users,
         'error': error,
+        'news': News.objects.order_by('created_at').last(),
     }
     return render(request, 'explore/index.html', context)
 

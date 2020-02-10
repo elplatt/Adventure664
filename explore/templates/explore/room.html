@@ -20,7 +20,7 @@
     <p id="area-exits">
       Connections:
       {% for c in area.outgoing.all %}
-        {{ c.title }}
+        {{ c.title }}{% if not forloop.last %},{% endif %}
       {% endfor %}
     </p>
   </div>

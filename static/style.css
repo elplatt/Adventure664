@@ -164,3 +164,6 @@ p:last-child {
   background: white;
   cursor: hand;
 }
+#news {
+  white-space: pre-wrap;
+}

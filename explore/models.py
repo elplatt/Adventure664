@@ -15,6 +15,13 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 
+class News(models.Model):
+    created_at = DateTimeField(auto_now_add=True)
+    text = TextField(blank=True, default='')
+
+    def __str__(self):
+        return self.text
+
 class Area(models.Model):
 
     created_at = DateTimeField(auto_now_add=True)
