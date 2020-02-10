@@ -204,3 +204,27 @@ def delete_connection(request, source_id, title):
         'user': request.user,
     }
     return render(request, 'explore/delete.html', context)
+
+@login_required
+def delete_activity(request, area_id, activity_id):
+
+    # Look up area object and activity
+    area = get_object_or_404(Area, id=area_id)
+    activity = get_object_or_404(Activity, id=activity_id)
+    
+    # Check for changes
+    if request.method == 'POST':
+        # Create and validate a form
+        form = DeleteForm(request.POST)
+        if form.is_valid():
+            activity.delete()
+            return HttpResponseRedirect(reverse('explore:area', args=[area.id]))
+
+    # Render delete form
+    context = {
+        'type': 'Activity',
+        'title': f'{activity.activity_text}',
+        'form': DeleteForm(),
+        'user': request.user,
+    }
+    return render(request, 'explore/delete.html', context)
