@@ -28,7 +28,13 @@
     {% if areas %}
       <ul>
       {% for a in areas %}
-        <li><a href="{% url 'explore:area' a.id %}">{{ a.title }}</a></li>
+        <li>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="area_title" value="{{ a.title }}"/>
+            <input type="submit" value="{{ a.title }}"/>
+          </form>
+        </li>
       {% endfor %}
       </ul>
     {% else %}

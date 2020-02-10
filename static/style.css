@@ -155,3 +155,12 @@ p:last-child {
 #bottom h2 {
   text-align: center;
 }
+#previous-areas input[type=submit] {
+  display: inline;
+  margin: 0;
+  border: none;
+  padding: 0;
+  color: black;
+  background: white;
+  cursor: hand;
+}

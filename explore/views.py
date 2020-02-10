@@ -25,6 +25,12 @@ def index(request):
     if request.method == 'POST':
         try:
             area = Area.objects.get(title=request.POST['area_title'])
+            # Update score
+            if area.creator != request.user:
+                score = area.creator.score
+                score.total += 1
+                score.save()
+            # Send user to area
             return HttpResponseRedirect(reverse('explore:area', kwargs={'area_id': area.id}))
         except ObjectDoesNotExist:
             try:
