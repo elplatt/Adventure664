@@ -2,7 +2,7 @@
 
 {% block dashboard %}
 <div id="dashboard">
-  Score: {{ user.score.total|stringformat:"09d" }}
+  User: {{ user.username }} - Score: {{ user.score.total|stringformat:"09d" }}
 </div>
 {% endblock %}
 

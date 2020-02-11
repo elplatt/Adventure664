@@ -6,34 +6,48 @@ body {
   margin: 0 auto;
   position: relative;
 }
-#dashboard {
-  position: absolute;
-  top: 1em;
-  right: 1ch;
+#container div {
+  padding: 0 1ch 1em 1ch;
+}
+#container div.row {
+  width: 100%;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+#container div.section {
+  border: solid 1px gray;
+  font-family: 'courier new';
+  padding: 1em 1ch;
+  margin: 0 auto -1px auto;
+}
+h1 {
+  padding: 1em 1ch 1em 1ch;
+}
+h2 {
+  padding: 1em 0;
 }
 h1, h2 {
   font-family: 'courier new';
   font-size: 1em;
   font-weight: bold;
-  padding: 1em 1ch;
   margin: 0 auto;
 }
 h1 a {
   color: inherit;
   text-decoration: inherit;
 }
-h2 {
-  margin-top: 2em;
+#dashboard {
+  position: absolute;
+  top: 1em;
+  right: 1ch;
 }
-.section {
-  border: solid 1px gray;
-  font-family: 'courier new';
+#container #tutorial {
   padding: 1em 1ch;
-  margin: 0 auto -1px auto;
-}
-#tutorial {
-  padding: 0 1ch;
   margin: 0 auto;
+}
+#tutorial h2 {
+  padding-bottom: 0;
 }
 #activity {
   max-height: 24em;
@@ -141,18 +155,25 @@ p:last-child {
   padding: 0;
   list-style: none;
 }
-#bottom {
-  padding: 0 1ch;
-  margin: 0 auto;
+#about {
+  width: 43ch;
+  float: left;
 }
-#bottom th {
+#top-players {
+  width: 33ch;
+  float: left;
+}
+#top-players h2 {
+  padding-top: 0;
+}
+#top-players th {
   text-align: left;
 }
-#bottom table {
+#top-players table {
   margin: 0 auto;
   border-spacing: 1em 0;
 }
-#bottom h2 {
+#top-players h2 {
   text-align: center;
 }
 #previous-areas input[type=submit] {

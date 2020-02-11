@@ -3,12 +3,34 @@
 {% block dashboard %}
 <div id="dashboard">
   {% if user.is_authenticated %}
-  Score: {{ user.score.total|stringformat:"09d" }}
+  User: {{ user.username}} - Score: {{ user.score.total|stringformat:"09d" }}
   {% endif %}
 </div>
 {% endblock %}
 
 {% block content %}
+  <div class="row">
+    <div id="about">
+      Welcome to Adventure.TXT, a collaborative multiplayer text adventure.
+      The game and story are created by the users, and always evolving.
+      Your score increases as other players interact with parts of the world you created.
+      Keep an eye out on the lobby for news about new features.
+    </div>
+    <div id="top-players">
+      <h2>Top Players</h2>
+      <table>
+        <thead>
+          <th>Players</th>
+          <th>Score</th>
+        </thead>
+        <tbody>
+        {% for u in top_users %}
+          <tr><td>{{ u.username }}</td><td>{{ u.score.total|stringformat:"09d" }}</tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
   <div class="section">
     Lobby
   </div>
@@ -43,20 +65,6 @@
     {% else %}
       <p>No areas have been published yet.</p>
     {% endif %}
-  </div>
-  <div id="bottom">
-    <h2>Top Users</h2>
-    <table>
-      <thead>
-        <th>User</th>
-        <th>Score</th>
-      </thead>
-      <tbody>
-      {% for u in top_users %}
-        <tr><td>{{ u.username }}</td><td>{{ u.score.total|stringformat:"09d" }}</tr>
-      {% endfor %}
-      </tbody>
-    </table>
   </div>
 {% endblock %}
 

@@ -197,7 +197,7 @@ def delete_connection(request, source_id, title):
     # Render delete form
     context = {
         'type': 'Connection',
-        'title': f'{title} : {connection.title} : {connection.area_to}',
+        'title': f'{area_from.title} : {connection.title} : {connection.area_to}',
         'form': DeleteForm(),
         'user': request.user,
     }
