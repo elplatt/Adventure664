@@ -52,10 +52,11 @@ h1 a {
 #activity {
   max-height: 24em;
 }
-.activity {
+#container div.activity {
   margin-bottom: 1em;
+  padding: 0;
 }
-.activity:last-child {
+#container div.activity:last-child {
   margin-bottom: 0;
 }
 #actions {
