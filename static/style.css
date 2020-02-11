@@ -1,3 +1,8 @@
+html body * {
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+}
 body {
   font-family: 'courier new';
   font-size: 16px;
