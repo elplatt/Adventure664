@@ -6,7 +6,8 @@ body {
   margin: 0 auto;
   position: relative;
 }
-#container div {
+#container > div,
+#container div.row > div {
   padding: 0 1ch 1em 1ch;
 }
 #container div.row {
