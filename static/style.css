@@ -167,3 +167,8 @@ p:last-child {
 #news {
   white-space: pre-wrap;
 }
+#messages li {
+  display: block;
+  margin: 0;
+  padding: 0;
+}

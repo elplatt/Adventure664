@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from .models import Activity
@@ -13,9 +14,16 @@ class Interpreter(object):
         'down'
     ]
 
-    def __init__(self, models):
+    def __init__(self, models, request):
         # Save models
         self.models = models
+        self.request = request
+
+    def info(self, text):
+        messages.add_message(self.request, messages.INFO, text)
+
+    def error(self, text):
+        messages.add_message(self.request, messages.ERROR, text)
 
     def execute(self, command):
 
@@ -42,13 +50,7 @@ class Interpreter(object):
                     }
                     return reverse('explore:new_connection', kwargs=kwargs)
                 else:
-                    activity = Activity(
-                        area=self.models['area'],
-                        creator=self.models['user'],
-                        creator_only=True,
-                        activity_text='You must specify a connection title, e.g., "north".',
-                    )
-                    activity.save()
+                    self.error('You must specify a connection title, e.g., "north".')
                     return reverse('explore:area', args=[self.models['area'].id])
         if operator == 'delete':
             if target == 'connection':
@@ -56,24 +58,12 @@ class Interpreter(object):
                 try:
                     connection = self.models['area'].outgoing.get(title__iexact=title)
                 except ObjectDoesNotExist:
-                    activity = Activity(
-                        area=self.models['area'],
-                        creator=self.models['user'],
-                        creator_only=True,
-                        activity_text=f'Connection "{title}" does not exist',
-                    )
-                    activity.save()
+                    self.error(f'Connection "{title}" does not exist')
                     return reverse('explore:area', args=[self.models['area'].id])
 
                 # Make sure user created connection
                 if connection.creator is not None and connection.creator.id != self.models['user'].id:
-                    activity = Activity(
-                        area=self.models['area'],
-                        creator=self.models['user'],
-                        creator_only=True,
-                        activity_text=f'Someone else created "{target}", you can\'t delete it... yet.',
-                    )
-                    activity.save()
+                    self.error(f'Someone else created "{target}", you can\'t delete it... yet.')
                     return reverse('explore:area', args=[self.models['area'].id])
 
                 # Send to the delete form
@@ -83,13 +73,7 @@ class Interpreter(object):
                 }
                 return reverse('explore:delete_connection', kwargs=kwargs)
             else:
-               activity = Activity(
-                    area=self.models['area'],
-                    creator=self.models['user'],
-                    creator_only=True,
-                    activity_text=f'You can\'t delete that... yet.',
-               )
-               activity.save()
+               self.error('You can\'t delete that... yet.')
                return reverse('explore:area', args=[self.models['area'].id])
         elif operator == 'edit':
             if target == 'description':
@@ -98,32 +82,14 @@ class Interpreter(object):
             if self.models['area'].creator == self.models['user']:
                 self.models['area'].published = False
                 self.models['area'].save()
-                activity = Activity(
-                    area=self.models['area'],
-                    creator=self.models['user'],
-                    creator_only=True,
-                    activity_text=f'This area has been unpublished.',
-                )
-                activity.save()
+                self.info('This area has been unpublished.')
             else:
-                activity = Activity(
-                    area=self.models['area'],
-                    creator=self.models['user'],
-                    creator_only=True,
-                    activity_text=f'You can\'t unpublish an area created by another player... yet.',
-                )
-                activity.save()
+                self.error('You can\'t unpublish an area created by another player... yet.')
                 return reverse('explore:area', args=[self.models['area'].id])
         elif operator == 'publish':
             self.models['area'].published = True
             self.models['area'].save()
-            activity = Activity(
-                area=self.models['area'],
-                creator=self.models['user'],
-                creator_only=True,
-                activity_text=f'This area has been published to the front page.',
-            )
-            activity.save()
+            self.info('This area has been published to the front page.')
             return reverse('explore:area', args=[self.models['area'].id])
         elif command in connection_titles:
             try:
@@ -136,13 +102,7 @@ class Interpreter(object):
                     score.save()
                 return reverse('explore:area', args=[destination.id])
             except ObjectDoesNotExist:
-                    activity = Activity(
-                        area=self.models['area'],
-                        creator=self.models['user'],
-                        creator_only=True,
-                        activity_text=f'Connection "{command}" does not exist',
-                    )
-                    activity.save()
+                    self.error(f'Connection "{command}" does not exist')
                     return reverse('explore:area', args=[self.models['area'].id])
         else:
             # If no command, leave a message

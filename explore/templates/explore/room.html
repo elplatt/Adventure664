@@ -25,6 +25,13 @@
     </p>
   </div>
   {% endif %}
+  {% if messages %}
+  <ul id="messages" class="section">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
   {% if activities.count > 0 %}
     <div id="activity" class="section">
     {% for activity in activities %}

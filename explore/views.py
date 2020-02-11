@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -64,7 +65,7 @@ def area(request, area_id):
         form = CommandForm(request.POST)
         if form.is_valid():
             # Create the interpreter
-            i = Interpreter({'user': request.user, 'area': area})
+            i = Interpreter({'user': request.user, 'area': area}, request)
             path = i.execute(form.cleaned_data["command_text"])
             if path is not None:
                 return HttpResponseRedirect(path)
@@ -122,13 +123,7 @@ def new_connection(request, source_id, title):
     # Check whether connection exists
     try:
         connection = Connection.objects.get(area_from=area_from, title=title)
-        activity = Activity(
-            creator=request.user,
-            creator_only=True,
-            area=area_from,
-            activity_text=f'Unable to create connection "{title}": already exists'
-        )
-        activity.save()
+        messages.add_message(request, messages.ERROR, f'Unable to create connection "{title}": already exists')
         return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))        
     except ObjectDoesNotExist:
         pass
@@ -178,14 +173,8 @@ def delete_connection(request, source_id, title):
     try:
         connection = Connection.objects.get(area_from=area_from, title=title)
     except ObjectDoesNotExist:
-        activity = Activity(
-            creator=request.user,
-            creator_only=True,
-            area=area_from,
-            activity_text=f'Unable to delete connection "{title}": does not exist'
-        )
-        activity.save()
-        return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))        
+        messages.add_message(request, messages.ERROR, f'Unable to delete connection "{title}": does not exist')
+        return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
 
     # Check for changes
     if request.method == 'POST':
