@@ -20,6 +20,7 @@ class Interpreter(object):
     def execute(self, command):
 
         # Parse command into words
+        operator, target = '', ''
         command = command.strip().lower()
         words = command.split(' ')
         if len(words) > 0:
@@ -70,7 +71,7 @@ class Interpreter(object):
                         area=self.models['area'],
                         creator=self.models['user'],
                         creator_only=True,
-                        activity_text=f'Someone else created "{target}", you can\'t delete it... yet',
+                        activity_text=f'Someone else created "{target}", you can\'t delete it... yet.',
                     )
                     activity.save()
                     return reverse('explore:area', args=[self.models['area'].id])
@@ -81,9 +82,49 @@ class Interpreter(object):
                     'title': connection.title,
                 }
                 return reverse('explore:delete_connection', kwargs=kwargs)
+            else:
+               activity = Activity(
+                    area=self.models['area'],
+                    creator=self.models['user'],
+                    creator_only=True,
+                    activity_text=f'You can\'t delete that... yet.',
+               )
+               activity.save()
+               return reverse('explore:area', args=[self.models['area'].id])
         elif operator == 'edit':
             if target == 'description':
                 return reverse('explore:area_description', args=[self.models['area'].id])
+        elif operator == 'unpublish':
+            if self.models['area'].creator == self.models['user']:
+                self.models['area'].published = False
+                self.models['area'].save()
+                activity = Activity(
+                    area=self.models['area'],
+                    creator=self.models['user'],
+                    creator_only=True,
+                    activity_text=f'This area has been unpublished.',
+                )
+                activity.save()
+            else:
+                activity = Activity(
+                    area=self.models['area'],
+                    creator=self.models['user'],
+                    creator_only=True,
+                    activity_text=f'You can\'t unpublish an area created by another player... yet.',
+                )
+                activity.save()
+                return reverse('explore:area', args=[self.models['area'].id])
+        elif operator == 'publish':
+            self.models['area'].published = True
+            self.models['area'].save()
+            activity = Activity(
+                area=self.models['area'],
+                creator=self.models['user'],
+                creator_only=True,
+                activity_text=f'This area has been published to the front page.',
+            )
+            activity.save()
+            return reverse('explore:area', args=[self.models['area'].id])
         elif command in connection_titles:
             try:
                 connection = self.models['area'].outgoing.get(title__iexact=command)
