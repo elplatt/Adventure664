@@ -62,7 +62,7 @@ h1 a {
 #tutorial h2 {
   padding-bottom: 0;
 }
-#footer {
+#container #footer {
   padding: 1em 1ch;
   text-align: center;
 }
