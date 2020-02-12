@@ -38,8 +38,10 @@
   <div id="news" class="section">{{ news }}</div>
   {% endif %}
   <div id="select-area" class="section">
-    <p>Where would you like to go?</p>
-    <p>Enter the name of an area, or select from the list below.</p>
+    <p>
+      Where would you like to go?
+      Enter any existing or new area name, or select from the list below.
+    </p>
     <form method="post">
       {% csrf_token %}
       {{ select_area_form }}
