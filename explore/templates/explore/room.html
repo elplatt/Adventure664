@@ -2,6 +2,9 @@
 
 {% load player_extras %}
 
+{% block og_description %}<meta property="og:description" content="{{ area.title }} - {{ area.description }}" />{% endblock %}
+
+
 {% block dashboard %}
 <div id="dashboard">
   {% if user.is_authenticated %}
