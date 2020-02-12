@@ -107,13 +107,13 @@ def edit_area(request, area_id):
         # Create and validate a form
         form = AreaForm(request.POST)
         if form.is_valid():
-            title = request.POST.get('title', '').strip()
+            new_title = request.POST.get('title', '').strip()
             # Check whether title is already taken
-            other_area = Area.objects.filter(title__iexact=title).exclude(id=area.id).count()
+            other_area = Area.objects.filter(title__iexact=new_title).exclude(id=area_id).count()
             if other_area == 0:
-                area.title = title
+                area.title = new_title
             else:
-                messages.add_message(request, messages.ERROR, f'Couldn\'t change area name, "{title}" already exists.') 
+                messages.add_message(request, messages.ERROR, f'Couldn\'t change area name, "{new_title}" already exists.') 
             area.description = request.POST.get('description', '')
             area.save()
             # Update scores

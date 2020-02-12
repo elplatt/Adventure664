@@ -26,7 +26,8 @@ p {
   position: relative;
   overflow: hidden;
 }
-#container div.section {
+#container div.section,
+#container ul.section {
   border: solid 1px gray;
   font-family: 'courier new';
   padding: 1em 1ch;
