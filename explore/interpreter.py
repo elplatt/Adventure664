@@ -76,7 +76,10 @@ class Interpreter(object):
                self.error('You can\'t delete that... yet.')
                return reverse('explore:area', args=[self.models['area'].id])
         elif operator == 'edit':
-            if target == 'description':
+            if target == 'area':
+                return reverse('explore:edit_area', args=[self.models['area'].id])
+            elif target == 'description':
+                self.info('Note: "edit area" is way cooler than "edit description".')
                 return reverse('explore:area_description', args=[self.models['area'].id])
         elif operator == 'unpublish':
             if self.models['area'].creator == self.models['user']:

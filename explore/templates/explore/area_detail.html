@@ -10,10 +10,10 @@
   <div id="info" class="section">
     {{ area.title }}
   </div>
-  <div id="description" class="section">
+  <div id="description" class="section form">
     <form method="post">
       {% csrf_token %}
-      {{ area_form }}
+      {{ area_form.as_p }}
       <input type="submit" value="Update"/>
       <button onclick="window.history.back();">Cancel</button>
     </form>

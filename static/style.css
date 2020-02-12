@@ -147,6 +147,9 @@ p:last-child {
   width: 61ch;
   margin-right: -1ch;
 }
+.form p {
+  margin-top: 0;
+}
 .form label {
   display: inline;
   margin: 0;
@@ -162,6 +165,12 @@ p:last-child {
 }
 .form input[type=text],
 .form input[type=password] {
+  display: inline;
+}
+.form textarea {
+  width: 78ch;
+  margin: 0 -1ch 0 0;
+  vertical-align: top;
   display: inline;
 }
 .helptext {

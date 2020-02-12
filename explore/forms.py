@@ -28,6 +28,7 @@ class AreaForm(forms.Form):
         'autofocus': 'autofocus',
         'cols': '80',
     }
+    title = forms.CharField(label='Title')
     description = forms.CharField(
         label='Description',
         widget=forms.Textarea(attrs=attrs),

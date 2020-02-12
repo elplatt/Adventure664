@@ -97,7 +97,7 @@ def area(request, area_id):
     return render(request, 'explore/room.html', context)
 
 @login_required
-def area_description(request, area_id):
+def edit_area(request, area_id):
 
     # Look up area object
     area = get_object_or_404(Area, id=area_id)
@@ -107,6 +107,13 @@ def area_description(request, area_id):
         # Create and validate a form
         form = AreaForm(request.POST)
         if form.is_valid():
+            title = request.POST.get('title', '').strip()
+            # Check whether title is already taken
+            other_area = Area.objects.filter(title__iexact=title).exclude(id=area.id).count()
+            if other_area == 0:
+                area.title = title
+            else:
+                messages.add_message(request, messages.ERROR, f'Couldn\'t change area name, "{title}" already exists.') 
             area.description = request.POST.get('description', '')
             area.save()
             # Update scores
@@ -117,9 +124,13 @@ def area_description(request, area_id):
             return HttpResponseRedirect(reverse('explore:area', args=[area_id]))
 
     # Render edit form
+    initial =  {
+        'description': area.description,
+        'title': area.title,
+    }
     context = {
         'area': area,
-        'area_form': AreaForm(initial={'description': area.description}),
+        'area_form': AreaForm(initial=initial),
         'user': request.user,
     }
     return render(request, 'explore/area_detail.html', context)
