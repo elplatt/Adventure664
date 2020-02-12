@@ -61,6 +61,15 @@ h1 a {
 #tutorial h2 {
   padding-bottom: 0;
 }
+#area-players {
+  margin: 0;
+  padding: 0;
+}
+#area-players li {
+  margin: 0;
+  padding: 1em 0 0 0;
+  display: block;
+}
 #activity {
   max-height: 24em;
 }

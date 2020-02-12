@@ -9,6 +9,8 @@ from django.template import loader
 from django.urls import reverse
 
 from .models import Activity, Area, Connection, News
+from player.models import Player
+
 from .forms import (
         AreaForm,
 	CommandForm,
@@ -54,10 +56,14 @@ def index(request):
 
 def area(request, area_id):
 
-    # Get area object and clear activities from other areas
+    # Get area object
     area = get_object_or_404(Area, id=area_id)
     if request.user.is_authenticated:
+        # Clear activities from other areas
         Activity.tidy(request.user, area)
+        # Update player location
+        request.user.player.location = area
+        request.user.player.save()
 
     # If data has been posted, handle the command
     if request.method == 'POST':
@@ -78,10 +84,14 @@ def area(request, area_id):
     activities = Activity.objects.filter(area=area).filter(for_user).order_by('created_at')
 
     # Build context and render the template
+    players = area.player_set.all()
+    if request.user.is_authenticated:
+        players = players.exclude(user=request.user)
     context = {
        'user': request.user,
        'area': area,
        'activities': activities,
+       'players': players,
        'command_form': CommandForm(label_suffix='')
     }
     return render(request, 'explore/room.html', context)
@@ -124,7 +134,7 @@ def new_connection(request, source_id, title):
     try:
         connection = Connection.objects.get(area_from=area_from, title=title)
         messages.add_message(request, messages.ERROR, f'Unable to create connection "{title}": already exists')
-        return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))        
+        return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
     except ObjectDoesNotExist:
         pass
 

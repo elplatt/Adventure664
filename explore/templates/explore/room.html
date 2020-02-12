@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load player_extras %}
+
 {% block dashboard %}
 <div id="dashboard">
   {% if user.is_authenticated %}
@@ -13,6 +15,13 @@
     <p>{{ area.title }}</p>
     {% if area.description %}
       <div id="area-description">{{ area.description }}</div>
+    {% endif %}
+    {% if players %}
+       <ul id="area-players">
+       {% for player in players.all %}
+           <li><strong>{{ player.user.username }}</strong> {% player_status player %}</li>
+       {% endfor %}
+       </ul>
     {% endif %}
   </div>
   {% if area.outgoing.count > 0 %}
