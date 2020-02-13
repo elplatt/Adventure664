@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import (
+    CharField,
     DateTimeField,
     ForeignKey,
     OneToOneField,
@@ -14,6 +15,7 @@ from explore.models import Area
 class Player(models.Model):
     user = OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     location = ForeignKey(Area, null=True, on_delete=models.SET_NULL)
+    status = CharField(max_length=1024, blank=True, default='')
     last_active = DateTimeField(auto_now=True)
 
     def __str__(self):

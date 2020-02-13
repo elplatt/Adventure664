@@ -11,5 +11,7 @@ def player_status(player):
         return 'was here.'
     elif idle > timedelta(hours=1):
         return 'is snoozing in the corner.'
-    else:
+    elif player.status == '':
         return 'is here.'
+    else:
+        return player.status

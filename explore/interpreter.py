@@ -94,6 +94,11 @@ class Interpreter(object):
             self.models['area'].save()
             self.info('This area has been published to the front page.')
             return reverse('explore:area', args=[self.models['area'].id])
+        elif operator == 'status':
+            status = ' '.join(words[1:])
+            self.models['user'].player.status = status
+            self.models['user'].player.save()
+            self.info(f'Your status has been updated to:\n{self.models["user"].username} {status}')
         elif command in connection_titles:
             try:
                 connection = self.models['area'].outgoing.get(title__iexact=command)
