@@ -18,6 +18,7 @@ import os
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 
@@ -32,4 +33,5 @@ urlpatterns = [
     path('explore/', include('explore.urls')), 
     path('accounts/register', home.views.register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('guide/', TemplateView.as_view(template_name='home/guide.html'), name='guide'),
 ]

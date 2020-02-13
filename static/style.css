@@ -1,3 +1,6 @@
+/*
+ * GLOBAL LAYOUT
+*/
 html body * {
   -webkit-text-size-adjust: none;
   -moz-text-size-adjust: none;
@@ -6,9 +9,6 @@ html body * {
 body {
   font-family: 'courier new';
   font-size: 16px;
-}
-p {
-  font-size: 1em !important;
 }
 #container {
   width: 82ch;
@@ -33,47 +33,51 @@ p {
   padding: 1em 1ch;
   margin: 0 auto -1px auto;
 }
-h1 {
-  padding: 1em 1ch 1em 1ch;
+#dashboard {
+  position: absolute;
+  top: 0;
+  right: 1ch;
+  font-size: 1em;
 }
-h2 {
-  padding: 1em 0;
+
+/*
+ * GENERIC ELEMENTS
+*/
+p {
+  font-size: 1em !important;
 }
-h1, h2 {
+p:first-child {
+  margin-top: 0;
+}
+p:last-child {
+  margin-bottom: 0;
+}
+h1, h2, h3 {
   font-family: 'courier new';
   font-size: 1em !important;
   font-weight: bold;
-  margin: 0 auto;
+  padding: 0;
+}
+h1 {
+  margin: 1em auto;
+  padding: 0 1ch;
+}
+h2, h3 {
+  margin: 1em 0;
 }
 h1 a {
   color: inherit;
   text-decoration: inherit;
 }
-#dashboard {
-  position: absolute;
-  top: 1em;
-  right: 1ch;
-  font-size: 1em;
-}
-#container #tutorial {
-  padding: 1em 1ch;
-  margin: 0 auto;
-}
-#tutorial h2 {
-  padding-bottom: 0;
-}
 #container #footer {
   padding: 1em 1ch;
   text-align: center;
 }
-#area-players {
-  margin: 0;
-  padding: 0;
+.section :first-child {
+  margin-top: 0;
 }
-#area-players li {
-  margin: 0;
-  padding: 1em 0 0 0;
-  display: block;
+.section :last-child {
+  margin-bottom: 0;
 }
 #activity {
   max-height: 24em;
@@ -86,8 +90,10 @@ h1 a {
 #container div.activity:last-child {
   margin-bottom: 0;
 }
-#actions {
-}
+
+/*
+ * GENERIC FORM ELEMENTS
+*/
 .section form {
   margin: 0;
 }
@@ -135,15 +141,33 @@ input[type=submit]:focus {
   color: white;
   background: black;
 }
+
+/*
+ * PAGE STYLES
+*/
+#container #tutorial {
+  padding: 1em 1ch;
+  margin: 0 auto;
+}
+#tutorial h2 {
+  padding-bottom: 0;
+}
+#area-players {
+  margin: 0;
+  padding: 0;
+}
+#area-players li {
+  margin: 0;
+  padding: 1em 0 0 0;
+  display: block;
+}
+
+#actions {
+}
+
 #id_command_text {
   width: 78ch;
   margin-right: -1ch;
-}
-p:first-child {
-  margin-top: 0;
-}
-p:last-child {
-  margin-bottom: 0;
 }
 #area-description {
   white-space: pre-wrap;
@@ -196,12 +220,13 @@ p:last-child {
   width: 43ch;
   float: left;
 }
+
 #top-players {
   width: 33ch;
   float: left;
 }
 #top-players h2 {
-  padding-top: 0;
+  margin-top: 0;
 }
 #top-players th {
   text-align: left;
@@ -229,4 +254,8 @@ p:last-child {
   display: block;
   margin: 0;
   padding: 0;
+}
+.guide ul {
+  margin-top: 0;
+  margin-bottom: 0;
 }
