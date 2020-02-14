@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block dashboard %}
+<div id="dashboard">
+  User: {{ user.username }} - Score: {{ user.score.total|stringformat:"09d" }}
+</div>
+{% endblock %}
+
+{% block content %}
+  <div id="info" class="section">
+    {{ title }}
+  </div>
+  <div id="description" class="section form">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Create"/>
+      <button onclick="window.history.back();">Cancel</button>
+    </form>
+  </div>
+{% endblock %}
+

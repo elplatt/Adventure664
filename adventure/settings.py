@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'explore.apps.ExploreConfig',
     'player.apps.PlayerConfig',
+    'item.apps.ItemConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

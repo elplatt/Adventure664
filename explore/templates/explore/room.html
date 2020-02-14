@@ -19,6 +19,13 @@
     {% if area.description %}
       <div id="area-description">{{ area.description }}</div>
     {% endif %}
+    {% if items %}
+       <ul id="area-items">
+       {% for item in items %}
+           <li>{{ item.short_description }}</li>
+       {% endfor %}
+       </ul>
+    {% endif %}
     {% if players %}
        <ul id="area-players">
        {% for player in players.all %}

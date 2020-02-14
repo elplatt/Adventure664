@@ -31,6 +31,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='explore/', permanent=False), name='index'),
     path('admin/', admin.site.urls),
     path('explore/', include('explore.urls')), 
+    path('items/', include('item.urls')),
     path('accounts/register', home.views.register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('guide/', TemplateView.as_view(template_name='home/guide.html'), name='guide'),

@@ -92,6 +92,7 @@ def area(request, area_id):
        'area': area,
        'activities': activities,
        'players': players,
+       'items': area.item_set.all(),
        'command_form': CommandForm(label_suffix='')
     }
     return render(request, 'explore/room.html', context)

@@ -3,6 +3,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from .models import Activity
 
+from item.models import Item
+
 class Interpreter(object):
 
     ALLOWED_CONNECTIONS = [
@@ -99,6 +101,13 @@ class Interpreter(object):
             self.models['user'].player.status = status
             self.models['user'].player.save()
             self.info(f'Your status has been updated to:\n{self.models["user"].username} {status}')
+        elif operator == 'look':
+            look_at = ' '.join(words[1:])
+            try:
+                item = self.models['area'].item_set.filter(title__iexact=look_at)[0]
+                self.info(item.long_description)
+            except IndexError:
+                self.error('You don\'t see that here.')
         elif command in connection_titles:
             try:
                 connection = self.models['area'].outgoing.get(title__iexact=command)
