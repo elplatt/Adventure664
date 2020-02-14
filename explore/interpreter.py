@@ -54,6 +54,8 @@ class Interpreter(object):
                 else:
                     self.error('You must specify a connection title, e.g., "north".')
                     return reverse('explore:area', args=[self.models['area'].id])
+            elif target == 'item':
+                return reverse('item:create', args=[self.models['area'].id])
         if operator == 'delete':
             if target == 'connection':
                 title = ' '.join(words[2:]).strip().lower()
@@ -106,6 +108,11 @@ class Interpreter(object):
             try:
                 item = self.models['area'].item_set.filter(title__iexact=look_at)[0]
                 self.info(item.long_description)
+                # Update scores
+                if self.models['user'] != item.creator.id:
+                    score = item.creator.score
+                    score.total += 1
+                    score.save()
             except IndexError:
                 self.error('You don\'t see that here.')
         elif command in connection_titles:

@@ -32,6 +32,11 @@ def create(request, area_id):
             )
             item.save()
             messages.add_message(request, messages.INFO, f'Created item "{title}".')
+            # Update scores
+            if area.creator != request.user:
+                score = area.creator.score
+                score.total += 10
+                score.save()
             return HttpResponseRedirect(reverse('explore:area', args=[area_id]))
 
     form = ItemForm()
