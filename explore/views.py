@@ -47,7 +47,7 @@ def index(request):
     context = {
         'select_area_form': SelectAreaForm,
         'user': request.user,
-        'areas': Area.objects.filter(published=True),
+        'areas': Area.objects.filter(published=True).order_by('-created_at'),
         'top_users': top_users,
         'error': error,
         'news': News.objects.order_by('created_at').last(),
