@@ -66,7 +66,9 @@ class Interpreter(object):
                     return reverse('explore:area', args=[self.models['area'].id])
 
                 # Make sure user created connection
-                if connection.creator is not None and connection.creator.id != self.models['user'].id:
+                if (connection.creator is not None
+                        and connection.creator != self.models['user']
+                        and connection.area_from.creator != self.models['user']):
                     self.error(f'Someone else created "{title}", you can\'t delete it... yet.')
                     return reverse('explore:area', args=[self.models['area'].id])
 
