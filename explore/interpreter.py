@@ -140,6 +140,7 @@ class Interpreter(object):
                 score = self.models['area'].creator.score
                 score.total += 1
                 score.save()
+            return reverse('explore:area', args=[self.models['area'].id])
 
     def validate_connection(title):
         return len(title) > 0 
