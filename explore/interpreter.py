@@ -67,7 +67,7 @@ class Interpreter(object):
 
                 # Make sure user created connection
                 if connection.creator is not None and connection.creator.id != self.models['user'].id:
-                    self.error(f'Someone else created "{target}", you can\'t delete it... yet.')
+                    self.error(f'Someone else created "{title}", you can\'t delete it... yet.')
                     return reverse('explore:area', args=[self.models['area'].id])
 
                 # Send to the delete form
@@ -76,6 +76,24 @@ class Interpreter(object):
                     'title': connection.title,
                 }
                 return reverse('explore:delete_connection', kwargs=kwargs)
+            elif target == 'item':
+                title = ' '.join(words[2:]).strip().lower()
+                try:
+                    item = self.models['area'].item_set.get(title__iexact=title)
+                except ObjectDoesNotExist:
+                    self.error(f'Item "{title}" does not exist')
+                    return reverse('explore:area', args=[self.models['area'].id])
+
+                # Make sure user created item
+                if item.creator is not None and item.creator != self.models['user']:
+                    self.error(f'Someone else created "{title}", you can\'t delete it... yet.')
+                    return reverse('explore:area', args=[self.models['area'].id])
+
+                # Send to the delete form
+                kwargs = {
+                    'item_id': item.id,
+                }
+                return reverse('item:delete', kwargs=kwargs)
             else:
                self.error('You can\'t delete that... yet.')
                return reverse('explore:area', args=[self.models['area'].id])
