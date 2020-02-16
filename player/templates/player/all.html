@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="section">
+<h2>Players</h2>
+</div>
+<div class="section">
+{% if user_list %}
+  <table class="players">
+    <thead><th>Player</th><th>Location</th><th>Score</th></thead>
+    <tbody>
+    {% for user in user_list %}
+      <tr>
+        <td>{{ user.username }}</td>
+        <td>{{ user.player.location }}</td>
+        <td>{{ user.score.total | stringformat:"09d" }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>There are currently no players.</p>
+{% endif %}
+</div>
+
+{% endblock %}

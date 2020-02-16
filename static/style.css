@@ -264,3 +264,10 @@ input[type=submit]:focus {
   margin-top: 0;
   margin-bottom: 0;
 }
+
+table.players th {
+  text-align:left
+}
+.table.players {
+  border-spacing: 1em 0;
+}
