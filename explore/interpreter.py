@@ -87,7 +87,7 @@ class Interpreter(object):
                     return reverse('explore:area', args=[self.models['area'].id])
 
                 # Make sure user created item
-                if item.creator is not None and item.creator != self.models['user']:
+                if item.creator and item.creator != self.models['user']:
                     self.error(f'Someone else created "{title}", you can\'t delete it... yet.')
                     return reverse('explore:area', args=[self.models['area'].id])
 
@@ -129,7 +129,7 @@ class Interpreter(object):
                 item = self.models['area'].item_set.filter(title__iexact=look_at)[0]
                 self.info(item.long_description)
                 # Update scores
-                if self.models['user'] != item.creator.id:
+                if self.models['user'] != item.creator:
                     score = item.creator.score
                     score.total += 1
                     score.save()
@@ -139,7 +139,7 @@ class Interpreter(object):
             try:
                 connection = self.models['area'].outgoing.get(title__iexact=command)
                 destination = connection.area_to
-                if connection.creator is not None and connection.creator.id != self.models['user'].id:
+                if connection.creator != self.models['user']:
                     # Update score
                     score = connection.creator.score
                     score.total += 1
@@ -156,7 +156,7 @@ class Interpreter(object):
                 area=self.models['area'],
                 activity_text=activity_text)
             activity.save()
-            if self.models['user'].id != self.models['area'].creator.id:
+            if self.models['area'].creator and self.models['user'] != self.models['area'].creator:
                 score = self.models['area'].creator.score
                 score.total += 1
                 score.save()

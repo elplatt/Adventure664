@@ -22,35 +22,46 @@ from .interpreter import Interpreter
 
 def index(request):
 
-    error = None
+    # Get lobby area
+    try:
+        lobby = Area.objects.get(title="Lobby")
+    except ObjectDoesNotExist:
+        lobby = Area(title="Lobby")
+        lobby.save()
 
-    # If data has been posted, redirect to room
+    # If data has been posted, handle the command
     if request.method == 'POST':
-        try:
-            area = Area.objects.get(title=request.POST['area_title'])
-            # Update score
-            if area.creator != request.user:
-                score = area.creator.score
-                score.total += 1
-                score.save()
-            # Send user to area
-            return HttpResponseRedirect(reverse('explore:area', kwargs={'area_id': area.id}))
-        except ObjectDoesNotExist:
-            try:
-                area = Area(title=request.POST['area_title'], creator=request.user, published=True)
-                area.save()
-                return HttpResponseRedirect(reverse('explore:area', kwargs={'area_id': area.id}))
-            except ValueError:
-                error = 'No area by that name exists. To create one, you can <a href="/accounts/login?next=/explore">login</a> or <a href="/accounts/register?next=/explore">create an account</a>.'
+        # Create and validate a form
+        form = CommandForm(request.POST)
+        if form.is_valid():
+            # Create the interpreter
+            i = Interpreter({'user': request.user, 'area': lobby}, request)
+            path = i.execute(form.cleaned_data["command_text"])
+            if path is not None:
+                return HttpResponseRedirect(path)
 
+    # Get a list of activities
+    if request.user.is_authenticated:
+        for_user = Q(creator_only=False) | Q(creator=request.user)
+    else:
+        for_user = Q(creator_only=False)
+    activities = Activity.objects.filter(area=lobby).filter(for_user).order_by('created_at')
+
+    # Construct context variables and render template
     top_users = User.objects.exclude(username='admin').order_by('-score__total')[:5]
+    players = lobby.player_set.all()
+    if request.user.is_authenticated:
+        players = players.exclude(user=request.user)
     context = {
-        'select_area_form': SelectAreaForm,
         'user': request.user,
+        'area': lobby,
         'areas': Area.objects.filter(published=True).order_by('-created_at'),
+        'players': players,
+        'activities': activities,
+        'items': lobby.item_set.all(),
         'top_users': top_users,
-        'error': error,
         'news': News.objects.order_by('created_at').last(),
+        'command_form': CommandForm(label_suffix=''),
     }
     return render(request, 'explore/index.html', context)
 
@@ -118,7 +129,7 @@ def edit_area(request, area_id):
             area.description = request.POST.get('description', '')
             area.save()
             # Update scores
-            if request.user.id != area.creator.id:
+            if area.creator and request.user.id != area.creator.id:
                 score = area.creator.score
                 score.total += 10
                 score.save()
@@ -166,11 +177,11 @@ def new_connection(request, source_id, title):
             if created:
                 connection.save()
                 # Update scores
-                if area_from.creator.id != request.user.id:
+                if area_from.creator and area_from.creator != request.user:
                     score = area_from.creator.score
                     score.total += 10
                     score.save()
-                if area_to.creator.id != request.user.id:
+                if area_from.creator and area_to.creator != request.user:
                     score = area_to.creator.score
                     score.total += 10
                     score.save()
@@ -206,11 +217,11 @@ def delete_connection(request, source_id, title):
             area_to = connection.area_to
             connection.delete()
             # Update scores
-            if area_from.creator.id != request.user.id:
+            if area_from.creator and area_from.creator != request.user:
                 score = area_from.creator.score
                 score.total += 5
                 score.save()
-            if area_to.creator.id != request.user.id:
+            if area_to.creator and area_to.creator != request.user:
                 score = area_to.creator.score
                 score.total += 5
                 score.save()

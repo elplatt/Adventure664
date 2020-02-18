@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
+{% load player_extras %}
+
 {% block dashboard %}
 <div id="dashboard">
   {% if user.is_authenticated %}
   User: {{ user.username}} - Score: {{ user.score.total|stringformat:"09d" }}
+  {% else %}
+  <a href="{% url 'login' %}">login</a>
   {% endif %}
 </div>
 {% endblock %}
@@ -33,44 +37,86 @@
       </table>
     </div>
   </div>
-  <div class="section">
-    Lobby
-  </div>
   {% if news %}
-  <div id="news" class="section">{{ news }}</div>
+  <div id="news" class="section"><h2>News</h2><div>{{ news }}</div></div>
   {% endif %}
-  <div id="select-area" class="section">
-    <p>
-      Where would you like to go?
-    </p>
-    <p>
-      Enter any existing or new area name, or select from the list below.
-    </p>
-    <form method="post">
-      {% csrf_token %}
-      {{ select_area_form }}
-    </form>
-    {% if error %}
-    <p>{{ error|safe }}</p>
+
+  <div class="section">
+    <h2>Lobby</h2>
+
+    {% if area.description %}
+      <div id="area-description">{{ area.description }}</div>
+    {% endif %}
+    {% if items %}
+       <ul id="area-items">
+       {% for item in items %}
+           <li>{{ item.short_description }}</li>
+       {% endfor %}
+       </ul>
+    {% endif %}
+    {% if players %}
+       <ul id="area-players">
+       {% for player in players.all %}
+           <li><strong>{{ player.user.username }}</strong> {% player_status player %}</li>
+       {% endfor %}
+       </ul>
     {% endif %}
   </div>
-  <div id="previous-areas" class="section">
-    <p>Recently Created</p>
-    {% if areas %}
-      <ul>
-      {% for a in areas %}
-        <li>
-          <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="area_title" value="{{ a.title }}"/>
-            <input type="submit" value="{{ a.title }}"/>
-          </form>
-        </li>
+  {% if area.outgoing.count > 0 %}
+  <div class="section">
+    <p id="area-exits">
+      Connections:
+      {% for c in area.outgoing.all %}
+        {{ c.title }}{% if not forloop.last %},{% endif %}
       {% endfor %}
-      </ul>
-    {% else %}
-      <p>No areas have been published yet.</p>
-    {% endif %}
+    </p>
+  </div>
+  {% endif %}
+  {% if messages %}
+  <ul id="messages" class="section">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if activities.count > 0 %}
+    <div id="activity" class="section">
+    {% for activity in activities %}
+      <div class="activity">
+        {{ activity.activity_text }}
+        {% if activity.creator.id == request.user.id and not activity.creator_only %}
+        <a href="{% url 'explore:delete_activity' area.id activity.id %}">[x]</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+    </div>
+  {% endif %}
+  <div id="actions" class="section">
+      <form method="post">
+        {% csrf_token %}
+        {{ command_form }}
+      </form>
+  </div>
+
+  <div class="row">
+    <div id="recently-created">
+      <h3>Recently Created</h3>
+      {% if areas %}
+        <ul class="text-list">
+        {% for a in areas %}
+          <li>
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="area_title" value="{{ a.title }}"/>
+              <input type="submit" value="{{ a.title }}"/>
+            </form>
+          </li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p>No areas have been published yet.</p>
+      {% endif %}
+    </div>
   </div>
 {% endblock %}
 

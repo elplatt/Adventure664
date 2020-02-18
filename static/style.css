@@ -10,24 +10,24 @@ body {
   font-family: 'courier new';
   font-size: 16px;
 }
-#container {
+.container {
   width: 82ch;
   margin: 0 auto;
   position: relative;
 }
-#container > div,
-#container div.row > div {
+.container > div,
+.container div.row > div {
   font-size: 1em !important;
   padding: 0 1ch 1em 1ch;
 }
-#container div.row {
+.container div.row {
   width: 100%;
   padding: 0;
   position: relative;
   overflow: hidden;
 }
-#container div.section,
-#container ul.section {
+.container div.section,
+.container ul.section {
   border: solid 1px gray;
   font-family: 'courier new';
   padding: 1em 1ch;
@@ -69,7 +69,12 @@ h1 a {
   color: inherit;
   text-decoration: inherit;
 }
-#container #footer {
+form {
+  margin: 0;
+  padding: 0;
+}
+
+.container #footer {
   padding: 1em 1ch;
   text-align: center;
 }
@@ -82,12 +87,12 @@ h1 a {
 #activity {
   max-height: 24em;
 }
-#container div.activity {
+.container div.activity {
   margin-bottom: 1em;
   padding: 0;
   font-size: 1em !important;
 }
-#container div.activity:last-child {
+.container div.activity:last-child {
   margin-bottom: 0;
 }
 
@@ -145,7 +150,7 @@ input[type=submit]:focus {
 /*
  * PAGE STYLES
 */
-#container #tutorial {
+.container #tutorial {
   padding: 1em 1ch;
   margin: 0 auto;
 }
@@ -168,6 +173,7 @@ input[type=submit]:focus {
   white-space: pre-wrap;
 }
 #actions {
+  margin-bottom: 1em;
 }
 
 #id_command_text {
@@ -211,11 +217,11 @@ input[type=submit]:focus {
   display: inline-block;
   width: 80ch;
 }
-#previous-areas ul {
+ul.text-list {
   margin: 0;
   padding: 0;
 }
-#previous-areas li {
+ul.text-list li {
   display: block;
   margin: 0;
   padding: 0;
@@ -243,7 +249,7 @@ input[type=submit]:focus {
 #top-players h2 {
   text-align: center;
 }
-#previous-areas input[type=submit] {
+#recently-created input[type=submit] {
   display: inline;
   margin: 0;
   border: none;
@@ -254,6 +260,7 @@ input[type=submit]:focus {
 }
 #news {
   white-space: pre-wrap;
+  margin-bottom: 1em;
 }
 #messages li {
   display: block;

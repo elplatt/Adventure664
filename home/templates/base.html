@@ -8,7 +8,7 @@
     {% block og_description %}<meta property="og:description"        content="Welcome to Adventure.TXT, a collaborative multiplayer text adventure. The game and story are created by the users, and always evolving. Your score increases as other players interact with parts of the world you create. Keep an eye out on the lobby for news about new features." />{% endblock %}
   </head>
   <body>
-    <div id="container">
+    <div id="container" class="container">
       <h1><a href="{% url 'explore:index' %}">Adventure.TXT</a></h1>
       {% block dashboard %}
       {% endblock %}
