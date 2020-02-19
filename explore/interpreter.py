@@ -119,6 +119,8 @@ class Interpreter(object):
             self.info('This area has been published to the front page.')
             return reverse('explore:area', args=[self.models['area'].id])
         elif operator == 'status':
+            if not self.models['user'].is_authenticated:
+                return reverse('explore:area', args=[self.models['area'].id])
             status = ' '.join(words[1:])
             self.models['user'].player.status = status
             self.models['user'].player.save()
@@ -150,6 +152,9 @@ class Interpreter(object):
                     return reverse('explore:area', args=[self.models['area'].id])
         else:
             # If no command, leave a message
+            if not self.models['user'].is_authenticated:
+                self.error('That command is only available to registered users, please login.')
+                return reverse('explore:area', args=[self.models['area'].id])
             activity_text = f'{self.models["user"].username}: {command}'
             activity = Activity(
                 creator=self.models['user'],

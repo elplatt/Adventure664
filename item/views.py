@@ -14,6 +14,7 @@ from explore.models import Area
 from .forms import ItemForm
 from .models import Item
 
+@login_required
 def create(request, area_id):
 
     # Get area
