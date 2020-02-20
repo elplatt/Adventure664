@@ -181,7 +181,7 @@ def new_connection(request, source_id, title):
                     score = area_from.creator.score
                     score.total += 10
                     score.save()
-                if area_from.creator and area_to.creator != request.user:
+                if area_to.creator and area_to.creator != request.user:
                     score = area_to.creator.score
                     score.total += 10
                     score.save()
