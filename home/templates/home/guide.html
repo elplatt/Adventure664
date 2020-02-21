@@ -20,15 +20,33 @@
 <div class="section">
 <h3 id="areas">Areas</h3>
 <p>The main screen displays information about an area. Areas can be physical locations (e.g., Sicilia's Pizzeria), or they can be a more abstract state of being (e.g., Engulfed in Flames). Areas have a <strong>title</strong> and a <strong>description</strong>.</p>
-<p>To edit the title or description of an area, type "edit area" at the prompt.</p>
+<p>You can create an area using the <strong>create area</strong> command. You can optionally follow the create area command with the area's desired title:</p>
+<p>
+&gt; create area<br/>
+&gt; create area Ann Arbor
+</p>
+<p>To edit the title or description of an area, type <strong>edit area</strong> at the prompt.</p>
 <p>Areas also display information about other players who area present, as well as messages that have been left by players passing through.</p>
 <p>New areas can be created by typing their name in the Lobby, or when creating a new connection.</p>
-<p>Areas created from the Lobby are automatically <strong>published</strong> to the Lobby's area listing. Other areas can be published to this list by entering "publish" at the prompt while in that area. Simliarly, areas can be removed from the list using the "unpublish" command.</p>
+<p>Areas created from the Lobby are automatically published to the Lobby's area listing. Other areas can be published to this list by entering <strong>publish</strong> at the prompt while in that area. Simliarly, areas can be removed from the list using the <strong>unpublish</strong> command.</p>
 </div>
 <div class="section">
 <h3 id="connections">Connections</h3>
-<p>It is possible to move between areas using <strong>connections</strong>. If any area has any connections, they are listed below the description. Connections can be physical directions or any other kind of action (e.g., "north" or "jump into the fire"). Each connection leads to a specific area. When you enter the name of that connection at the prompt, the area display will update to show a new area.</p>
-<p>Connections can be added by entering "create connection [title]" at the prompt, where [title] is the title of the connection. Connections can also be deleted by entering "delete connection [title]".</p> 
+<p>It is possible to move between areas using <strong>connections</strong>. If any area has any connections, they are listed below the description. Connections can be physical directions or any other kind of action (e.g., "north" or "jump into the fire"). Each connection leads to a specific area. When you enter the title of that connection at the prompt, the area display will update to show a new area. For example:</p>
+<p>
+&gt; north<br/>
+&gt; ponder existence<br/>
+&gt; jump into the fire
+</p>
+<p>Connections can be added by entering <strong>create connection &lt;title&gt;</strong> at the prompt, where <strong>&lt;title&gt;</strong> is the title of the connection:</p>
+<p>
+&gt; create connection north<br/>
+&gt; create connection ponder existence<br/>
+&gt; create connection jump into the fire
+<p></p>Connections can also be deleted by entering <strong>delete connection &lt;title&gt;</strong>"</p>
+<p>You can use the <strong>warp</strong> command to go directly to a specific area:<br/>
+&gt; warp Ann Arbor
+</p>
 </div>
 <div class="section">
 <h3 id="items">Items</h3>
@@ -43,12 +61,15 @@
 <div class="section">
 <h3 id="players">Players</h3>
 <p>When you enter an area, any other players also in that area will be listed under the area's description.</p>
-<p>To update the way you are described to other players, use the <strong>status</strong> command:<br/>&gt; status is juggling lobsters</>
+<p>To update the way you are described to other players, use the <strong>status</strong> command:</p>
+<p>
+&gt; status is juggling lobsters
+</p>
 <p>Players can also leave messages for each other.</p>
 </div>
 <div class="section">
 <h3 id="messages">Messages</h3>
-<p>Anything entered at the prompt that is not recognized as a command is left in the current area as a message. The message remains even after you leave the area. You can delete a message by clicking the [x] symbol next to it.</p>
+<p>Anything entered at the prompt that is not recognized as a command is left in the current area as a message. The message remains even after you leave the area. You can delete a message by clicking the <strong>[x]</strong> symbol next to it.</p>
 </div>
 
 {% endblock %}
