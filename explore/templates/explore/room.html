@@ -8,7 +8,11 @@
 {% block dashboard %}
 <div id="dashboard">
   {% if user.is_authenticated %}
-  User: {{ user.username }} - Score: {{ user.score.total|stringformat:"09d" }}
+  User: {{ user.username}} - Score: {{ user.score.total|stringformat:"09d" }}
+  {% else %}
+  <a href="{% url 'login' %}?next={{ request.path }}">login</a>
+  or
+  <a href="{% url 'register' %}?next={{ request.path }}">register</a>  
   {% endif %}
 </div>
 {% endblock %}
