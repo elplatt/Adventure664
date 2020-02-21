@@ -21,6 +21,12 @@ class Interpreter(object):
         self.models = models
         self.request = request
 
+    def current_url(self):
+        return self.request.path
+    
+    def error_url(self):
+        return self.request.path
+
     def info(self, text):
         messages.add_message(self.request, messages.INFO, text)
 
@@ -48,14 +54,20 @@ class Interpreter(object):
                 if Interpreter.validate_connection(title):
                     kwargs = {
                         'source_id': self.models['area'].id,
-                        'title': title,
+                        'title': title
                     }
-                    return reverse('explore:new_connection', kwargs=kwargs)
+                    url = '{}?next={}'.format(
+                        reverse('explore:new_connection', kwargs=kwargs),
+                        self.current_url())
+                    return url
                 else:
                     self.error('You must specify a connection title, e.g., "north".')
-                    return reverse('explore:area', args=[self.models['area'].id])
+                    return self.error_url()
             elif target == 'item':
-                return reverse('item:create', args=[self.models['area'].id])
+                url = '{}?next={}'.format(
+                    reverse('item:create', args=[self.models['area'].id]),
+                    self.current_url())
+                return url
         if operator == 'delete':
             if target == 'connection':
                 title = ' '.join(words[2:]).strip().lower()
@@ -63,48 +75,60 @@ class Interpreter(object):
                     connection = self.models['area'].outgoing.get(title__iexact=title)
                 except ObjectDoesNotExist:
                     self.error(f'Connection "{title}" does not exist')
-                    return reverse('explore:area', args=[self.models['area'].id])
+                    return self.error_url()
 
                 # Make sure user created connection
                 if (connection.creator is not None
                         and connection.creator != self.models['user']
                         and connection.area_from.creator != self.models['user']):
                     self.error(f'Someone else created "{title}", you can\'t delete it... yet.')
-                    return reverse('explore:area', args=[self.models['area'].id])
+                    return self.error_url()
 
                 # Send to the delete form
                 kwargs = {
                     'source_id': self.models['area'].id,
                     'title': connection.title,
                 }
-                return reverse('explore:delete_connection', kwargs=kwargs)
+                url = '{}?next={}'.format(
+                    reverse('explore:delete_connection', kwargs=kwargs),
+                    self.current_url())
+                return url
             elif target == 'item':
                 title = ' '.join(words[2:]).strip().lower()
                 try:
                     item = self.models['area'].item_set.get(title__iexact=title)
                 except ObjectDoesNotExist:
                     self.error(f'Item "{title}" does not exist')
-                    return reverse('explore:area', args=[self.models['area'].id])
+                    return self.error_url()
 
                 # Make sure user created item
                 if item.creator and item.creator != self.models['user']:
                     self.error(f'Someone else created "{title}", you can\'t delete it... yet.')
-                    return reverse('explore:area', args=[self.models['area'].id])
+                    return self.error_url()
 
                 # Send to the delete form
                 kwargs = {
                     'item_id': item.id,
                 }
-                return reverse('item:delete', kwargs=kwargs)
+                url = '{}?next={}'.format(
+                    reverse('item:delete', kwargs=kwargs),
+                    self.current_url())
+                return url
             else:
                self.error('You can\'t delete that... yet.')
-               return reverse('explore:area', args=[self.models['area'].id])
+               return self.error_url()
         elif operator == 'edit':
             if target == 'area':
-                return reverse('explore:edit_area', args=[self.models['area'].id])
+                url = '{}?next={}'.format(
+                    reverse('explore:edit_area', args=[self.models['area'].id]),
+                    self.current_url())
+                return url
             elif target == 'description':
                 self.info('Note: "edit area" is way cooler than "edit description".')
-                return reverse('explore:area_description', args=[self.models['area'].id])
+                url = '{}?next={}'.format(
+                    reverse('explore:area_description', args=[self.models['area'].id]),
+                    self.current_url())
+                return url
         elif operator == 'unpublish':
             if self.models['area'].creator == self.models['user']:
                 self.models['area'].published = False
@@ -112,15 +136,15 @@ class Interpreter(object):
                 self.info('This area has been unpublished.')
             else:
                 self.error('You can\'t unpublish an area created by another player... yet.')
-                return reverse('explore:area', args=[self.models['area'].id])
+                return self.error_url()
         elif operator == 'publish':
             self.models['area'].published = True
             self.models['area'].save()
             self.info('This area has been published to the front page.')
-            return reverse('explore:area', args=[self.models['area'].id])
         elif operator == 'status':
             if not self.models['user'].is_authenticated:
-                return reverse('explore:area', args=[self.models['area'].id])
+                self.error('Only logged in users can set a status.')
+                return self.error_url()
             status = ' '.join(words[1:])
             self.models['user'].player.status = status
             self.models['user'].player.save()
@@ -137,6 +161,7 @@ class Interpreter(object):
                     score.save()
             except IndexError:
                 self.error('You don\'t see that here.')
+                return self.error_url()
         elif command in connection_titles:
             try:
                 connection = self.models['area'].outgoing.get(title__iexact=command)
@@ -149,12 +174,12 @@ class Interpreter(object):
                 return reverse('explore:area', args=[destination.id])
             except ObjectDoesNotExist:
                     self.error(f'Connection "{command}" does not exist')
-                    return reverse('explore:area', args=[self.models['area'].id])
+                    return self.error_url()
         else:
             # If no command, leave a message
             if not self.models['user'].is_authenticated:
                 self.error('That command is only available to registered users, please login.')
-                return reverse('explore:area', args=[self.models['area'].id])
+                return self.error_url()
             activity_text = f'{self.models["user"].username}: {command}'
             activity = Activity(
                 creator=self.models['user'],
@@ -165,7 +190,9 @@ class Interpreter(object):
                 score = self.models['area'].creator.score
                 score.total += 1
                 score.save()
-            return reverse('explore:area', args=[self.models['area'].id])
+                
+        # If no other url given, use current url
+        return self.current_url()
 
     def validate_connection(title):
         return len(title) > 0 

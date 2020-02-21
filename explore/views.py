@@ -13,7 +13,7 @@ from player.models import Player
 
 from .forms import (
         AreaForm,
-	CommandForm,
+        CommandForm,
         ConnectionForm,
         DeleteForm,
         SelectAreaForm,
@@ -35,7 +35,10 @@ def index(request):
         form = CommandForm(request.POST)
         if form.is_valid():
             # Create the interpreter
-            i = Interpreter({'user': request.user, 'area': lobby}, request)
+            i = Interpreter(
+                {'user': request.user, 'area': lobby},
+                request,
+            )
             path = i.execute(form.cleaned_data["command_text"])
             if path is not None:
                 return HttpResponseRedirect(path)
@@ -157,7 +160,11 @@ def new_connection(request, source_id, title):
     try:
         connection = Connection.objects.get(area_from=area_from, title=title)
         messages.add_message(request, messages.ERROR, f'Unable to create connection "{title}": already exists')
-        return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
+        if request.GET['next']:
+            url = request.GET['next']
+        else:
+            url = reverse('explore:area', args=[area_from.id])
+        return HttpResponseRedirect(url)
     except ObjectDoesNotExist:
         pass
 
@@ -185,7 +192,11 @@ def new_connection(request, source_id, title):
                     score = area_to.creator.score
                     score.total += 10
                     score.save()
-            return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
+            if request.POST['next']:
+                url = request.POST['next']
+            else:
+                url = reverse('explore:area', args=[area_from.id])
+            return HttpResponseRedirect(url)
 
     # Render edit form
     context = {
@@ -207,7 +218,11 @@ def delete_connection(request, source_id, title):
         connection = Connection.objects.get(area_from=area_from, title=title)
     except ObjectDoesNotExist:
         messages.add_message(request, messages.ERROR, f'Unable to delete connection "{title}": does not exist')
-        return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
+        if request.GET['next']:
+            url = request.GET['next']
+        else:
+            url = reverse('explore:area', args=[area_from.id])
+        return HttpResponseRedirect(url)
 
     # Check for changes
     if request.method == 'POST':
@@ -225,7 +240,11 @@ def delete_connection(request, source_id, title):
                 score = area_to.creator.score
                 score.total += 5
                 score.save()
-            return HttpResponseRedirect(reverse('explore:area', args=[area_from.id]))
+            if request.POST['next']:
+                url = request.POST['next']
+            else:
+                url = reverse('explore:area', args=[area_from.id])
+            return HttpResponseRedirect(url)
 
     # Render delete form
     context = {
@@ -249,7 +268,11 @@ def delete_activity(request, area_id, activity_id):
         form = DeleteForm(request.POST)
         if form.is_valid():
             activity.delete()
-            return HttpResponseRedirect(reverse('explore:area', args=[area.id]))
+            if request.POST['next']:
+                url = request.POST['next']
+            else:
+                url = reverse('explore:area', args=[area_from.id])
+            return HttpResponseRedirect(url)
 
     # Render delete form
     context = {

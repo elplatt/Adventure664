@@ -39,7 +39,11 @@ def create(request, area_id):
                 score = area.creator.score
                 score.total += 10
                 score.save()
-            return HttpResponseRedirect(reverse('explore:area', args=[area_id]))
+            if request.POST['next']:
+                url = request.POST['next']
+            else:
+                url = reverse('explore:area', args=[area_from.id])
+            return HttpResponseRedirect(url)
 
     form = ItemForm()
     return render(request, 'item/item_detail.html', { 'title': 'Create Item', 'form': form })
@@ -60,11 +64,15 @@ def delete(request, item_id):
             item.delete()
             messages.add_message(request, messages.INFO, f'Item "{title}" deleted.')
             # Update scores
-            if area.creator.id != request.user.id:
+            if area.creator and area.creator != request.user:
                 score = area.creator.score
                 score.total += 1
                 score.save()
-            return HttpResponseRedirect(reverse('explore:area', args=[area.id]))
+            if request.POST['next']:
+                url = request.POST['next']
+            else:
+                url = reverse('explore:area', args=[area_from.id])
+            return HttpResponseRedirect(url)
 
     # Render delete form
     context = {
