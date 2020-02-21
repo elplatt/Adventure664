@@ -217,7 +217,7 @@ class Interpreter(object):
             if not self.models['user'].is_authenticated:
                 self.error('That command is only available to registered users, please login.')
                 return self.error_url()
-            activity_text = f'{self.models["user"].username}: {command}'
+            activity_text = f'{self.models["user"].username}: {raw_command}'
             activity = Activity(
                 creator=self.models['user'],
                 area=self.models['area'],
