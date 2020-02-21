@@ -32,6 +32,7 @@ class AreaForm(forms.Form):
     description = forms.CharField(
         label='Description',
         widget=forms.Textarea(attrs=attrs),
+        required=False,
     )
 
 class ConnectionForm(forms.Form):
