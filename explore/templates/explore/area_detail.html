@@ -8,7 +8,11 @@
 
 {% block content %}
   <div id="info" class="section">
-    {{ area.title }}
+    {% if area %}
+      Edit Area: {{ area.title }}
+    {% else %}
+      Create Area
+    {% endif %}
   </div>
   <div id="description" class="section form">
     <form method="post">

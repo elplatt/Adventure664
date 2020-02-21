@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from .models import Activity
 
-from item.models import Item
+from item.models import Area, Item
 
 class Interpreter(object):
 
@@ -33,12 +33,13 @@ class Interpreter(object):
     def error(self, text):
         messages.add_message(self.request, messages.ERROR, text)
 
-    def execute(self, command):
+    def execute(self, raw_command):
 
         # Parse command into words
         operator, target = '', ''
-        command = command.strip().lower()
+        command = raw_command.strip().lower()
         words = command.split(' ')
+        raw_words = raw_command.split(' ')
         if len(words) > 0:
             operator = words[0].strip().lower()
         if len(words) > 1:
@@ -49,7 +50,24 @@ class Interpreter(object):
 
         # Determine type of command
         if operator == 'create':
-            if target == 'connection':
+            if target == 'area':
+                title = ' '.join(raw_words[2:]).strip()
+                try:
+                    Area.objects.get(title__iexact=title.lower())
+                    self.error(f'Area "{title}" already exists.')
+                    return self.current_url()
+                except ObjectDoesNotExist:
+                    pass
+                if title:
+                    url = '{}?next={}'.format(
+                        reverse('explore:create_area', args=[title]),
+                        self.current_url())
+                else:
+                    url = '{}?next={}'.format(
+                        reverse('explore:create_area'),
+                        self.current_url())
+                return url
+            elif target == 'connection':
                 title = ' '.join(words[2:]).strip().lower()
                 if Interpreter.validate_connection(title):
                     kwargs = {

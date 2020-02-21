@@ -112,6 +112,45 @@ def area(request, area_id):
     return render(request, 'explore/room.html', context)
 
 @login_required
+def create_area(request, area_title=''):
+
+    # Look up area object
+    try:
+        area = Area.objects.get(title__iexact=area_title.strip())
+        messages.add_message(request, messages.ERROR, f'Area "{area_title}" already exists.')
+        if request.POST['next']:
+            url = request.POST['next']
+        elif request.GET['next']:
+            url = request.GET['next']
+        else:
+            url = request.path
+        return HttpResponseRedirect(url)
+    except ObjectDoesNotExist:
+        pass
+
+    # Check for changes
+    if request.method == 'POST':
+        # Create and validate a form
+        form = AreaForm(request.POST)
+        if form.is_valid():
+            new_title = request.POST.get('title', '').strip()
+            new_description = request.POST.get('description' '').strip()
+            area = Area(title=new_title, description=new_description, creator=request.user)
+            area.save()
+            url = request.POST.get('next', reverse('explore:area', args=[area.id]))
+            return HttpResponseRedirect(url)
+
+    # Render edit form
+    initial =  {
+        'title': area_title,
+    }
+    context = {
+        'area_form': AreaForm(initial=initial),
+        'user': request.user,
+    }
+    return render(request, 'explore/area_detail.html', context)
+
+@login_required
 def edit_area(request, area_id):
 
     # Look up area object
