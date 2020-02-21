@@ -147,6 +147,22 @@ class Interpreter(object):
                     reverse('explore:area_description', args=[self.models['area'].id]),
                     self.current_url())
                 return url
+        elif operator == 'warp':
+            title = ' '.join(words[1:]).strip()
+            if not title:
+                self.error('Warp where?')
+                return self.error_url()
+            try:
+                area = Area.objects.get(title__iexact=title)
+            except ObjectDoesNotExist:
+                self.error(f'There is no area named "{title}".')
+                return self.error_url()
+            # Update score
+            if area.creator and area.creator != self.models['user']:
+                score = area.creator.score
+                score.total += 3
+                score.save()
+            return reverse('explore:area', args=[area.id])
         elif operator == 'unpublish':
             if self.models['area'].creator == self.models['user']:
                 self.models['area'].published = False
