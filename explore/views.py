@@ -310,7 +310,7 @@ def delete_activity(request, area_id, activity_id):
             if request.POST['next']:
                 url = request.POST['next']
             else:
-                url = reverse('explore:area', args=[area_from.id])
+                url = reverse('explore:area', args=[area.id])
             return HttpResponseRedirect(url)
 
     # Render delete form
