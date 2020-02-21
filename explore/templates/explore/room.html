@@ -64,16 +64,10 @@
     </div>
   {% endif %}
   <div id="actions" class="section">
-    {%if user.is_authenticated %}
-      <form method="post">
-        {% csrf_token %}
-        {{ command_form }}
-      </form>
-    {% else %}
-      <p>
-        You must <a href="{% url 'login' %}?next={{ request.path }}">login</a>
-        or <a href="{% url 'register' %}?next={{ request.path }}">create an account</a> to explore further.</p>
-    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {{ command_form }}
+    </form>
   </div>
   <div id="tutorial">
     <h2>How to Play</h2>

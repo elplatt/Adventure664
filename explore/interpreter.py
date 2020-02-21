@@ -162,6 +162,9 @@ class Interpreter(object):
             except IndexError:
                 self.error('You don\'t see that here.')
                 return self.error_url()
+        elif operator == 'exit' or operator == 'logout':
+            self.info('You have been logged out.')
+            return '{}?next={}'.format(reverse('logout'), reverse('explore:index'))
         elif command in connection_titles:
             try:
                 connection = self.models['area'].outgoing.get(title__iexact=command)
