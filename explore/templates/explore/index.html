@@ -109,7 +109,7 @@
           <li>
             <form method="post">
               {% csrf_token %}
-              <input type="hidden" name="area_title" value="{{ a.title }}"/>
+              <input type="hidden" name="command_text" value="warp {{ a.title }}"/>
               <input type="submit" value="{{ a.title }}"/>
             </form>
           </li>
