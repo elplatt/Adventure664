@@ -65,13 +65,15 @@
     {% endif %}
   </div>
   {% if area.outgoing.count > 0 %}
-  <div class="section">
-    <p id="area-exits">
+  <div id="area-exits" class="section">
       Connections:
       {% for c in area.outgoing.all %}
-        {{ c.title }}{% if not forloop.last %},{% endif %}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="command_text" value="{{ c.title }}"/>
+          <button type="submit">{{ c.title }}</button>{% if not forloop.last %},{% endif %}
+        </form>
       {% endfor %}
-    </p>
   </div>
   {% endif %}
   {% if messages %}

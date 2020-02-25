@@ -249,7 +249,8 @@ ul.text-list li {
 #top-players h2 {
   text-align: center;
 }
-#recently-created input[type=submit] {
+#recently-created input[type=submit],
+#area-exits button {
   display: inline;
   margin: 0;
   border: none;
@@ -257,6 +258,9 @@ ul.text-list li {
   color: black;
   background: white;
   cursor: hand;
+}
+#area-exits form {
+  display: inline;
 }
 #news {
   white-space: pre-wrap;
