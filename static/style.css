@@ -86,6 +86,7 @@ form {
 }
 #activity {
   max-height: 24em;
+  overflow: scroll;
 }
 .container div.activity {
   margin-bottom: 1em;
