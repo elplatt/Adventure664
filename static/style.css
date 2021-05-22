@@ -85,13 +85,17 @@ form {
   margin-bottom: 0;
 }
 #activity {
-  max-height: 24em;
+  display: flex;
+  flex-direction: column-reverse;
+  max-height: 16em;
   overflow: scroll;
 }
 .container div.activity {
-  margin-bottom: 1em;
   padding: 0;
   font-size: 1em !important;
+}
+.container div.activity a {
+  text-decoration: none;
 }
 .container div.activity:last-child {
   margin-bottom: 0;
