@@ -48,7 +48,7 @@ def index(request):
         for_user = Q(creator_only=False) | Q(creator=request.user)
     else:
         for_user = Q(creator_only=False)
-    activities = Activity.objects.filter(area=lobby).filter(for_user).order_by('created_at')
+    activities = Activity.objects.filter(area=lobby).filter(for_user).order_by('-created_at')
 
     # Construct context variables and render template
     top_users = User.objects.exclude(username='admin').order_by('-score__total')[:5]
