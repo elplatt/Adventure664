@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template import loader
 from django.urls import reverse
 
@@ -28,6 +28,15 @@ def index(request):
     except ObjectDoesNotExist:
         lobby = Area(title="Lobby")
         lobby.save()
+
+    # Check if user has a current location
+    try:
+        player = request.user.player
+        location = player.location
+        if location != lobby:
+            return redirect('explore:area', area_id=location.id)
+    except AttributeError:
+        pass
 
     # If data has been posted, handle the command
     if request.method == 'POST':
@@ -68,6 +77,25 @@ def index(request):
     }
     return render(request, 'explore/index.html', context)
 
+def lobby(request):
+
+    # Get lobby area
+    try:
+        lobby = Area.objects.get(title="Lobby")
+    except ObjectDoesNotExist:
+        lobby = Area(title="Lobby")
+        lobby.save()
+
+    # Set player's current location to lobby
+    try:
+        player = request.user.player
+        player.location = lobby
+        player.save()
+    except AttributeError:
+        pass
+
+    return redirect('explore:index')
+
 def area(request, area_id):
 
     # Get area object
@@ -107,6 +135,7 @@ def area(request, area_id):
        'activities': activities,
        'players': players,
        'items': area.item_set.all(),
+       'subtitle': area.title,
        'command_form': CommandForm(label_suffix='')
     }
     return render(request, 'explore/room.html', context)

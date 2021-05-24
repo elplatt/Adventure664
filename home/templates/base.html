@@ -1,7 +1,12 @@
 {% load static %}
 <html>
   <head>
-    <title>Adventure.TXT</title>
+    <title>
+      Adventure.TXT
+      {% if subtitle %}
+      : {{ subtitle }}
+      {% endif %}
+    </title>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title"              content="Adventure.TXT" />
@@ -9,7 +14,7 @@
   </head>
   <body>
     <div id="container" class="container">
-      <h1><a href="{% url 'explore:index' %}">Adventure.TXT</a></h1>
+      <h1><a href="{% url 'explore:lobby' %}">Adventure.TXT</a></h1>
       {% block dashboard %}
       {% endblock %}
       {% block content %}

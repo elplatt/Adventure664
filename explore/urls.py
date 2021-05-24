@@ -4,6 +4,7 @@ from . import views
 app_name = 'explore'
 urlpatterns = [
         path('', views.index, name='index'),
+        path('lobby/', views.lobby, name='lobby'),
         path('create/', views.create_area, name='create_area'),
         path('create/<area_title>', views.create_area, name='create_area'),
         path('<int:area_id>/', views.area, name='area'),
