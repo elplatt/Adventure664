@@ -59,13 +59,9 @@ class Interpreter(object):
                 except ObjectDoesNotExist:
                     pass
                 if title:
-                    url = '{}?next={}'.format(
-                        reverse('explore:create_area', args=[title]),
-                        self.current_url())
+                    url = reverse('explore:create_area', args=[title])
                 else:
-                    url = '{}?next={}'.format(
-                        reverse('explore:create_area'),
-                        self.current_url())
+                    url = reverse('explore:create_area')
                 return url
             elif target == 'connection':
                 title = ' '.join(words[2:]).strip().lower()

@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.template import loader
 from django.urls import reverse
+from django.utils.datastructures import MultiValueDictKeyError
 
 from .models import Activity, Area, Connection, News
 from player.models import Player
@@ -147,12 +148,17 @@ def create_area(request, area_title=''):
     try:
         area = Area.objects.get(title__iexact=area_title.strip())
         messages.add_message(request, messages.ERROR, f'Area "{area_title}" already exists.')
-        if request.POST['next']:
-            url = request.POST['next']
-        elif request.GET['next']:
+        # Default to request url
+        url = request.path
+        # Check for 'next' variable in get and post
+        try:
             url = request.GET['next']
-        else:
-            url = request.path
+        except MultiValueDictKeyError:
+            pass
+        try:
+            url = request.POST['next']
+        except MultiValueDictKeyError:
+            pass
         return HttpResponseRedirect(url)
     except ObjectDoesNotExist:
         pass

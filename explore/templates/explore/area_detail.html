@@ -24,7 +24,9 @@
     <form method="post">
       {% csrf_token %}
       {{ area_form.as_p }}
+      {% if request.GET.next %}
       <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+      {% endif %}
       <input type="submit" value="Update"/>
       <button onclick="window.history.back();">Cancel</button>
     </form>
