@@ -25,8 +25,8 @@ class CommandForm(forms.Form):
 
 class AreaForm(forms.Form):
     attrs = {
-        'autofocus': 'autofocus',
         'cols': '80',
+        'autofocus': 'autofocus'
     }
     title = forms.CharField(label='Title')
     description = forms.CharField(

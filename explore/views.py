@@ -175,12 +175,22 @@ def create_area(request, area_title=''):
             url = request.POST.get('next', reverse('explore:area', args=[area.id]))
             return HttpResponseRedirect(url)
 
-    # Render edit form
+    # Build edit form
     initial =  {
         'title': area_title,
     }
+    area_form = AreaForm(initial=initial)
+    if len(area_title) > 0:
+        # Focus description if title already exists
+        area_form.fields['description'].widget.attrs['autofocus'] = 'autofocus'
+    else:
+        # Otherwise focus title
+        area_form.fields['title'].widget.attrs['autofocus'] = 'autofocus'
+
+
+    # Render edit form
     context = {
-        'area_form': AreaForm(initial=initial),
+        'area_form': area_form,
         'user': request.user,
     }
     return render(request, 'explore/area_detail.html', context)
