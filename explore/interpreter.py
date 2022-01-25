@@ -49,6 +49,9 @@ class Interpreter(object):
         connection_titles = [c.title.lower().strip() for c in self.models['area'].outgoing.all()]
 
         # Determine type of command
+        if operator == 'help':
+            # Send to How To Play page
+            return reverse('guide')
         if operator == 'create':
             if target == 'area':
                 title = ' '.join(raw_words[2:]).strip()
