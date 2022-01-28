@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.template import loader
 from django.urls import reverse
@@ -140,6 +140,18 @@ def area(request, area_id):
        'command_form': CommandForm(label_suffix='')
     }
     return render(request, 'explore/room.html', context)
+
+def json_activity(request, area_id):
+    # Get area object
+    area = get_object_or_404(Area, id=area_id)
+    # Get a list of activities
+    if request.user.is_authenticated:
+        for_user = Q(creator_only=False) | Q(creator=request.user)
+    else:
+        for_user = Q(creator_only=False)
+    activities = Activity.objects.filter(area=area).filter(for_user).order_by('-created_at')
+    return JsonResponse({"activities": [str(a) for a in activities]})
+
 
 @login_required
 def create_area(request, area_title=''):
