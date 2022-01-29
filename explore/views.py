@@ -124,7 +124,7 @@ def area(request, area_id):
         for_user = Q(creator_only=False) | Q(creator=request.user)
     else:
         for_user = Q(creator_only=False)
-    activities = Activity.objects.filter(area=area).filter(for_user).order_by('-created_at')
+    activities = Activity.objects.filter(area=area).filter(for_user).order_by('-created_at')[:24]
 
     # Build context and render the template
     players = area.player_set.all()
@@ -149,7 +149,7 @@ def json_activity(request, area_id):
         for_user = Q(creator_only=False) | Q(creator=request.user)
     else:
         for_user = Q(creator_only=False)
-    activities = Activity.objects.filter(area=area).filter(for_user).order_by('-created_at')
+    activities = Activity.objects.filter(area=area).filter(for_user).order_by('-created_at')[:24]
     return JsonResponse({"activities": [str(a) for a in activities]})
 
 

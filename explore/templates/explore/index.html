@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% block scripts %}
+<script type="text/javascript" src="/static/activity.js"></script>
+<script type="text/javascript">
+  console.log('Enabling ajax');
+  Activity.enableAjax({{ area.id }});
+</script>
+{% endblock %}
+
 {% load player_extras %}
 
 {% block dashboard %}
@@ -88,9 +96,6 @@
     {% for activity in activities %}
       <div class="activity">
         {{ activity.activity_text }}
-        {% if activity.creator.id == request.user.id and not activity.creator_only %}
-        <a href="{% url 'explore:delete_activity' area.id activity.id %}">[x]</a>
-        {% endif %}
       </div>
     {% endfor %}
     </div>

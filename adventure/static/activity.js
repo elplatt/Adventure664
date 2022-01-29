@@ -12,7 +12,7 @@
 Activity = {
 
 	// Timeout in ms
-	timeout: 1000,
+	timeout: 250,
 	areaId: 0,
 
 	// Get the url for area
@@ -35,8 +35,21 @@ Activity = {
 
 	// Handle response from activity poll
 	onLoad: function () {
+		// Parse data
 		let data = JSON.parse(this.responseText);
-		console.log(data);
+		// Get DOM element for activity section container and empty contents
+		let activitySection = document.getElementById('activity')
+		while (activitySection.firstChild) {
+			activitySection.removeChild(activitySection.firstChild);
+		}
+		// Create a div for each activity and append to the container
+		data.activities.forEach((activity) => {
+			let activityDiv = document.createElement("div");
+			activityDiv.classList.add("activity");
+			activityDiv.appendChild(document.createTextNode(activity));
+			activitySection.appendChild(activityDiv);
+		});
+		// Set up the next poll
 		Activity.enableAjax(Activity.areaId);
 	}
 };
