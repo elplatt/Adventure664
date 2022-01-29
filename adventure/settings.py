@@ -123,8 +123,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
-if sys.argv[1] != 'runserver':
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+try:
+    if sys.argv[1] != 'runserver':
+        STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+except IndexError:
+    pass
 
 # URL to use when referring to static files located in STATIC_ROOT.
 STATIC_URL = 'static/'
