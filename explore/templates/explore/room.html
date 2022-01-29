@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load player_extras %}
 
 {% block scripts %}
-<script type="text/javascript" src="/static/activity.js"></script>
+<script type="text/javascript" src="{% static 'activity.js' %}"></script>
 <script type="text/javascript">
   console.log('Enabling ajax');
   Activity.enableAjax({{ area.id }});

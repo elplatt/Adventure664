@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -121,10 +122,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+if sys.argv[1] != 'runserver':
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# URL to use when referring to static files located in STATIC_ROOT.
+STATIC_URL = 'static/'
 
+# This setting defines the additional locations the staticfiles app will traverse if the
+# FileSystemFinder finder is enabled, e.g. if you use the collectstatic or findstatic
+# management command or use the static file serving view.
 STATICFILES_DIRS =  [
     os.path.join(BASE_DIR, 'adventure/static')
 ]
