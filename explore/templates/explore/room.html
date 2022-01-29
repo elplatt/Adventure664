@@ -2,6 +2,14 @@
 
 {% load player_extras %}
 
+{% block scripts %}
+<script type="text/javascript" src="/static/activity.js"></script>
+<script type="text/javascript">
+  console.log('Enabling ajax');
+  Activity.enableAjax({{ area.id }});
+</script>
+{% endblock %}
+
 {% block og_description %}<meta property="og:description" content="{{ area.title }} - {{ area.description }}" />{% endblock %}
 
 

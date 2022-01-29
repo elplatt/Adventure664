@@ -31,6 +31,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='explore/', permanent=False), name='index'),
     path('admin/', admin.site.urls),
     path('explore/', include('explore.urls')), 
+    path('api/explore/', include('explore.api_urls')),
     path('items/', include('item.urls')),
     path('player/', include('player.urls')),
     path('accounts/register', home.views.register, name='register'),
