@@ -10,6 +10,7 @@ from explore.forms import CommandForm
 
 tutorial_titles = [
 	"Another White Room",
+	"Another White Room",
 ]
 
 tutorial_descriptions = [
@@ -17,6 +18,9 @@ tutorial_descriptions = [
 After you walk through the door, it disappears behind you. You'll have to create a new one.
 
 Type "create connection <name>" but replace "<name>" with a name like "north".
+""",
+"""\
+There's a door again! Type the name of the connection to go through it.
 """,
 ]
 
@@ -62,8 +66,9 @@ def tutorial (request, tutorial_stage):
     	title=tutorial_titles[tutorial_stage],
     	description=tutorial_descriptions[tutorial_stage])
 
-    # Initialize a fake connection list
-    connections = []
+    # Set up data structures and session
+    if tutorial_stage == 0:
+    	request.session["connections"] = []
 
     # If data has been posted, handle the command
     if request.method == 'POST':
@@ -73,7 +78,13 @@ def tutorial (request, tutorial_stage):
         	if tutorial_stage == 0:
 	        	if form.cleaned_data["command_text"].startswith("create connection"):
 	        		c = form.cleaned_data["command_text"][18:]
-	        		connections.append(c)
+	        		request.session["connections"] = [c]
+	        		return HttpResponseRedirect(reverse("tutorial:tutorial", args=[1]))
+	        	else:
+	        		messages.add_message(request, messages.INFO, "Huh? I don't understand.")
+	        elif tutorial_stage == 1:
+	        	if form.cleaned_data["command_text"] == request.session.get("connections")[0]:
+	        		return HttpResponseRedirect(reverse("tutorial:tutorial", args=[2]))
 	        	else:
 	        		messages.add_message(request, messages.INFO, "Huh? I don't understand.")
 
@@ -88,7 +99,7 @@ def tutorial (request, tutorial_stage):
        'subtitle': area.title,
        'command_form': CommandForm(label_suffix=''),
        'show_how_to_play': False,
-       'connections': connections,
+       'connections': request.session.get("connections", []),
     }
     return render(request, 'explore/room.html', context)
 
