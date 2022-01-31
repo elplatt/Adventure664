@@ -36,5 +36,6 @@ urlpatterns = [
     path('player/', include('player.urls')),
     path('accounts/register', home.views.register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('tutorial/', include('tutorial.urls')),
     path('guide/', TemplateView.as_view(template_name='home/guide.html'), name='guide'),
 ]

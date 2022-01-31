@@ -137,7 +137,8 @@ def area(request, area_id):
        'players': players,
        'items': area.item_set.all(),
        'subtitle': area.title,
-       'command_form': CommandForm(label_suffix='')
+       'command_form': CommandForm(label_suffix=''),
+       'show_how_to_play': True,
     }
     return render(request, 'explore/room.html', context)
 

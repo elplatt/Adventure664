@@ -47,17 +47,30 @@
        </ul>
     {% endif %}
   </div>
-  {% if area.outgoing.count > 0 %}
-  <div id="area-exits" class="section">
-      Connections:
-      {% for c in area.outgoing.all %}
-        <form method="post">
-          {% csrf_token %}
-          <input type="hidden" name="command_text" value="{{ c.title }}"/>
-          <button type="submit">{{ c.title }}</button>{% if not forloop.last %},{% endif %}
-        </form>
-      {% endfor %}
-  </div>
+  {% if connections %}
+    <div id="area-exits" class="section">
+        Connections:
+        {% for c in connections %}
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="command_text" value="c"/>
+            <button type="submit">{{ c }}</button>{% if not forloop.last %},{% endif %}
+          </form>
+        {% endfor %}
+    </div>
+  {% else %}
+    {% if area.outgoing.count > 0 %}
+    <div id="area-exits" class="section">
+        Connections:
+        {% for c in area.outgoing.all %}
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="command_text" value="{{ c.title }}"/>
+            <button type="submit">{{ c.title }}</button>{% if not forloop.last %},{% endif %}
+          </form>
+        {% endfor %}
+    </div>
+    {% endif %}
   {% endif %}
   {% if messages %}
   <ul id="messages" class="section">
@@ -81,6 +94,7 @@
       {{ command_form }}
     </form>
   </div>
+  {% if show_how_to_play %}
   <div id="tutorial">
     <h2>How to Play</h2>
     <p>
@@ -96,5 +110,6 @@
       &gt; Hello, World!
     </p>
   </div>
+  {% endif %}
 {% endblock %}
 
