@@ -10,6 +10,7 @@ urlpatterns = [
         path('<int:area_id>/', views.area, name='area'),
         path('<int:area_id>/edit', views.edit_area, name='edit_area'),
         path('<int:source_id>/connection/<title>', views.new_connection, name='new_connection'),
+        path('<int:source_id>/connection/<title>/edit', views.edit_connection, name='edit_connection'),
         path('<int:source_id>/connection/<title>/delete', views.delete_connection, name='delete_connection'),
         path('<int:area_id>/activity/<int:activity_id>/delete', views.delete_activity, name='delete_activity'),
         # Legacy paths, should not be used in new code

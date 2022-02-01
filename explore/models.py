@@ -61,7 +61,7 @@ class Connection(models.Model):
         null=True,
         on_delete=models.SET_NULL)
     area_from = ForeignKey(Area, on_delete=models.CASCADE, related_name='outgoing')
-    area_to = ForeignKey(Area, on_delete=models.CASCADE, related_name='incoming')
+    area_to = ForeignKey(Area, on_delete=models.CASCADE, related_name='incoming', null=True)
     title = CharField(max_length=512)
 
     def __str__(self):

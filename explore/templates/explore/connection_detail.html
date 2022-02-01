@@ -21,7 +21,7 @@
       {% csrf_token %}
       {{ connection_form }}
       <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-      <input type="submit" value="Create"/>
+      <input type="submit" value="Update"/>
       <button onclick="window.history.back();">Cancel</button>
     </form>
   </div>

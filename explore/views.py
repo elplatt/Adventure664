@@ -305,6 +305,61 @@ def new_connection(request, source_id, title):
     return render(request, 'explore/connection_detail.html', context)
 
 @login_required
+def edit_connection(request, source_id, title):
+
+    # Look up source area object
+    area_from = get_object_or_404(Area, id=source_id)
+
+    # Check whether connection exists
+    try:
+        connection = Connection.objects.get(area_from=area_from, title=title)
+    except ObjectDoesNotExist:
+        messages.add_message(request, messages.ERROR, f'Unable to edit connection "{title}": does not exist')
+        if request.GET['next']:
+            url = request.GET['next']
+        else:
+            url = reverse('explore:area', args=[area_from.id])
+        return HttpResponseRedirect(url)
+
+    # Check for changes
+    if request.method == 'POST':
+        # Create and validate a form
+        form = ConnectionForm(request.POST)
+        if form.is_valid():
+            area_to, created = Area.objects.get_or_create(
+                title=form.cleaned_data['destination_title'],
+                defaults={ 'creator': request.user })
+            connection.area_to = area_to
+            connection.save()
+            if created:
+                # Update scores
+                if connection.creator and connection.creator != request.user:
+                    score = connection.creator.score
+                    score.total += 5
+                    score.save()
+                if area_to.creator and area_to.creator != request.user:
+                    score = area_to.creator.score
+                    score.total += 5
+                    score.save()
+            if request.POST['next']:
+                url = request.POST['next']
+            else:
+                url = reverse('explore:area', args=[area_from.id])
+            return HttpResponseRedirect(url)
+
+    # Render edit form
+    initial = {}
+    if connection.area_to != None:
+        initial["destination_title"] = connection.area_to.title
+    context = {
+        'title': title,
+        'area_from': area_from,
+        'connection_form': ConnectionForm(initial=initial),
+        'user': request.user,
+    }
+    return render(request, 'explore/connection_detail.html', context)
+
+@login_required
 def delete_connection(request, source_id, title):
 
     # Look up source area object and connection

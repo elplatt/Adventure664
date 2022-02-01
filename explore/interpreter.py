@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
-from .models import Activity
 
-from item.models import Area, Item
+from .models import Activity, Area, Connection
+
+from item.models import Item
 
 class Interpreter(object):
 
@@ -69,14 +70,22 @@ class Interpreter(object):
             elif target == 'connection':
                 title = ' '.join(words[2:]).strip().lower()
                 if Interpreter.validate_connection(title):
-                    kwargs = {
-                        'source_id': self.models['area'].id,
-                        'title': title
-                    }
-                    url = '{}?next={}'.format(
-                        reverse('explore:new_connection', kwargs=kwargs),
-                        self.current_url())
-                    return url
+                    Connection(
+                        title=title,
+                        area_from=self.models['area'],
+                        creator=self.request.user
+                        ).save()
+                    if self.models['area'].creator != request.user:
+                        # Update score
+                        score = self.models['area'].creator.score
+                        score.total += 5
+                        score.save()
+                        self.models['area'].creator.score = score
+                    messages.add_message(
+                        self.request,
+                        messages.INFO,
+                        'Created connection "{}"'.format(title))
+                    return self.current_url()
                 else:
                     self.error('You must specify a connection title, e.g., "north".')
                     return self.error_url()
@@ -207,6 +216,12 @@ class Interpreter(object):
                     score = connection.creator.score
                     score.total += 1
                     score.save()
+                if connection.area_to == None:
+                    # Connection to nowhere, go to create form
+                    url = '{}?next={}'.format(
+                        reverse('explore:edit_connection', args=[connection.area_from.id, connection.title]),
+                        self.current_url())
+                    return url
                 return reverse('explore:area', args=[destination.id])
             except ObjectDoesNotExist:
                     self.error(f'Connection "{command}" does not exist')
