@@ -108,7 +108,7 @@ def tutorial (request, tutorial_stage):
     # If data has been posted, handle the command
     if request.method == 'POST':
         # Create and validate a form
-        if tutorial_stage in [0, 1, 3]:
+        if tutorial_stage in [0, 1, 3, 5]:
             form = CommandForm(request.POST)
             if form.is_valid():
                 if tutorial_stage == 0:
@@ -127,7 +127,19 @@ def tutorial (request, tutorial_stage):
                     if form.cleaned_data["command_text"] == "edit area":
                         return HttpResponseRedirect(reverse("tutorial:tutorial", args=[4]))
                     else:
-                        messages.add_message(request, messages.INFO, "Huh? I don't understand.")                    
+                        messages.add_message(request, messages.INFO, "Huh? I don't understand.")
+                elif tutorial_stage == 5:
+                    if form.cleaned_data["command_text"] == "warp lobby":
+                        return HttpResponseRedirect(reverse("explore:area", args=[1]))
+                    else:
+                        messages.add_message(
+                            request,
+                            messages.INFO,
+"""\
+Huh? What was that?
+
+Type "warp lobby" to go to the main game.
+""")
         elif tutorial_stage in [2]:
             form = ConnectionForm(request.POST)
             if form.is_valid():
@@ -137,8 +149,15 @@ def tutorial (request, tutorial_stage):
             form = AreaForm(request.POST)
             if form.is_valid():
                 request.session["description"] = form.cleaned_data["description"]
-                return HttpResponseRedirect(reverse("tutorial:tutorial", args=[5]))
+                messages.add_message(
+                    request,
+                    messages.INFO,
+"""\
+Now you know how to use and create connections and edit areas. Now you're ready to play for real!
 
+Type "warp lobby" to go to the main game.
+""")
+                return HttpResponseRedirect(reverse("tutorial:tutorial", args=[5]))
 
     # Build context and render the template
     if tutorial_templates[tutorial_stage] == "area":

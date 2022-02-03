@@ -53,6 +53,9 @@ class Interpreter(object):
         if operator == 'help':
             # Send to How To Play page
             return reverse('guide')
+        if operator == 'tutorial':
+            # Send to Tutorial
+            return reverse('tutorial:index')
         if operator == 'create':
             if target == 'area':
                 title = ' '.join(raw_words[2:]).strip()
