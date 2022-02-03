@@ -130,7 +130,7 @@ def tutorial (request, tutorial_stage):
                         messages.add_message(request, messages.INFO, "Huh? I don't understand.")
                 elif tutorial_stage == 5:
                     if form.cleaned_data["command_text"] == "warp lobby":
-                        return HttpResponseRedirect(reverse("explore:area", args=[1]))
+                        return HttpResponseRedirect(reverse("explore:index"))
                     else:
                         messages.add_message(
                             request,
