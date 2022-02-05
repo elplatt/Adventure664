@@ -61,7 +61,7 @@ Type "north" to go through the door.
         # Create and validate a form
         form = CommandForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data["command_text"] == "north":
+            if form.cleaned_data["command_text"].lower() == "north":
                 return HttpResponseRedirect(reverse("tutorial:tutorial", args=[0]))
         messages.add_message(request, messages.INFO, "Huh? I don't understand.")
 
@@ -112,24 +112,24 @@ def tutorial (request, tutorial_stage):
             form = CommandForm(request.POST)
             if form.is_valid():
                 if tutorial_stage == 0:
-                    if form.cleaned_data["command_text"].startswith("create connection"):
+                    if form.cleaned_data["command_text"].lower().startswith("create connection"):
                         c = form.cleaned_data["command_text"][18:]
                         request.session["connections"] = [c]
                         return HttpResponseRedirect(reverse("tutorial:tutorial", args=[1]))
                     else:
                         messages.add_message(request, messages.INFO, "Huh? I don't understand.")
                 elif tutorial_stage == 1:
-                    if form.cleaned_data["command_text"] == request.session.get("connections")[0]:
+                    if form.cleaned_data["command_text"].lower() == request.session.get("connections")[0].lower():
                         return HttpResponseRedirect(reverse("tutorial:tutorial", args=[2]))
                     else:
                         messages.add_message(request, messages.INFO, "Huh? I don't understand.")
                 elif tutorial_stage == 3:
-                    if form.cleaned_data["command_text"] == "edit area":
+                    if form.cleaned_data["command_text"].lower() == "edit area":
                         return HttpResponseRedirect(reverse("tutorial:tutorial", args=[4]))
                     else:
                         messages.add_message(request, messages.INFO, "Huh? I don't understand.")
                 elif tutorial_stage == 5:
-                    if form.cleaned_data["command_text"] == "warp lobby":
+                    if form.cleaned_data["command_text"].lower() == "warp lobby":
                         return HttpResponseRedirect(reverse("explore:index"))
                     else:
                         messages.add_message(
