@@ -78,7 +78,7 @@ class Interpreter(object):
                         area_from=self.models['area'],
                         creator=self.request.user
                         ).save()
-                    if self.models['area'].creator != request.user:
+                    if self.models['area'].creator and self.models['area'].creator != self.request.user:
                         # Update score
                         score = self.models['area'].creator.score
                         score.total += 5
